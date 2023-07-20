@@ -1,80 +1,34 @@
-package job_master_mgmt.model.master;
+package job_master_mgmt.model.dto;
 
 import java.io.Serializable;
-import javax.persistence.*;
 
-/**
- * The persistent class for the JOB_MASTER database table.
- * 
- */
-@Entity
-@Table(name = "JOB_MASTER")
-public class JobMaster implements Serializable 
-{
-	private static final long serialVersionUID = 1L;
+public class JobMaster_DTO implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "JOB_SEQUENCE")
-	@SequenceGenerator(name = "JOB_SEQUENCE", sequenceName = "JOB_SEQUENCE", allocationSize = 1)
-	@Column(name = "JOB_SEQ_NO")
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7900383033603744903L;
 	private Long jobSeqNo;
-
-	@Column(name = "DESCRIPTION")
 	private String description;
-
-	@Column(name = "DISC_PER")
 	private Float discPer;
-
-	@Column(name = "DISC_SEQ_NO")
 	private Long discSeqNo;
-
-	@Column(name = "DISC_VAL")
 	private Float discVal;
-
-	@Column(name = "DURATION")
 	private Float duration;
-
-	@Column(name = "DURATION_CODE_SEQ_NO")
 	private Long durationCodeSeqNo;
-
-	@Column(name = "JOB")
 	private String job;
-
-	@Column(name = "JOB_ID")
 	private String jobId;
-
-	@Column(name = "PARTY_SEQ_NO")
 	private Long partySeqNo;
-
-	@Column(name = "REMARK")
 	private String remark;
-
-	@Column(name = "SPECIFICATION_SEQ_NO")
 	private Long specificationSeqNo;
-
-	@Column(name = "STATUS")
 	private String status;
-
-	@Column(name = "TAX_PER")
 	private Float taxPer;
-
-	@Column(name = "TAX_SEQ_NO")
 	private Long taxSeqNo;
-
-	@Column(name = "TAX_VAL")
 	private Float taxVal;
-
-	@Column(name = "UNIT_RATE")
 	private Float unitRate;
-
-	@Column(name = "UNIT_RATE_SEQ_NO")
 	private Long unitRateSeqNo;
 
-	public JobMaster() {
-	}
-
 	public Long getJobSeqNo() {
-		return this.jobSeqNo;
+		return jobSeqNo;
 	}
 
 	public void setJobSeqNo(Long jobSeqNo) {
@@ -82,7 +36,7 @@ public class JobMaster implements Serializable
 	}
 
 	public String getDescription() {
-		return this.description;
+		return description;
 	}
 
 	public void setDescription(String description) {
@@ -90,7 +44,7 @@ public class JobMaster implements Serializable
 	}
 
 	public Float getDiscPer() {
-		return this.discPer;
+		return discPer;
 	}
 
 	public void setDiscPer(Float discPer) {
@@ -98,7 +52,7 @@ public class JobMaster implements Serializable
 	}
 
 	public Long getDiscSeqNo() {
-		return this.discSeqNo;
+		return discSeqNo;
 	}
 
 	public void setDiscSeqNo(Long discSeqNo) {
@@ -106,7 +60,7 @@ public class JobMaster implements Serializable
 	}
 
 	public Float getDiscVal() {
-		return this.discVal;
+		return discVal;
 	}
 
 	public void setDiscVal(Float discVal) {
@@ -114,7 +68,7 @@ public class JobMaster implements Serializable
 	}
 
 	public Float getDuration() {
-		return this.duration;
+		return duration;
 	}
 
 	public void setDuration(Float duration) {
@@ -122,7 +76,7 @@ public class JobMaster implements Serializable
 	}
 
 	public Long getDurationCodeSeqNo() {
-		return this.durationCodeSeqNo;
+		return durationCodeSeqNo;
 	}
 
 	public void setDurationCodeSeqNo(Long durationCodeSeqNo) {
@@ -130,7 +84,7 @@ public class JobMaster implements Serializable
 	}
 
 	public String getJob() {
-		return this.job;
+		return job;
 	}
 
 	public void setJob(String job) {
@@ -138,7 +92,7 @@ public class JobMaster implements Serializable
 	}
 
 	public String getJobId() {
-		return this.jobId;
+		return jobId;
 	}
 
 	public void setJobId(String jobId) {
@@ -146,7 +100,7 @@ public class JobMaster implements Serializable
 	}
 
 	public Long getPartySeqNo() {
-		return this.partySeqNo;
+		return partySeqNo;
 	}
 
 	public void setPartySeqNo(Long partySeqNo) {
@@ -154,7 +108,7 @@ public class JobMaster implements Serializable
 	}
 
 	public String getRemark() {
-		return this.remark;
+		return remark;
 	}
 
 	public void setRemark(String remark) {
@@ -162,7 +116,7 @@ public class JobMaster implements Serializable
 	}
 
 	public Long getSpecificationSeqNo() {
-		return this.specificationSeqNo;
+		return specificationSeqNo;
 	}
 
 	public void setSpecificationSeqNo(Long specificationSeqNo) {
@@ -170,7 +124,7 @@ public class JobMaster implements Serializable
 	}
 
 	public String getStatus() {
-		return this.status;
+		return status;
 	}
 
 	public void setStatus(String status) {
@@ -178,7 +132,7 @@ public class JobMaster implements Serializable
 	}
 
 	public Float getTaxPer() {
-		return this.taxPer;
+		return taxPer;
 	}
 
 	public void setTaxPer(Float taxPer) {
@@ -186,7 +140,7 @@ public class JobMaster implements Serializable
 	}
 
 	public Long getTaxSeqNo() {
-		return this.taxSeqNo;
+		return taxSeqNo;
 	}
 
 	public void setTaxSeqNo(Long taxSeqNo) {
@@ -194,7 +148,7 @@ public class JobMaster implements Serializable
 	}
 
 	public Float getTaxVal() {
-		return this.taxVal;
+		return taxVal;
 	}
 
 	public void setTaxVal(Float taxVal) {
@@ -202,7 +156,7 @@ public class JobMaster implements Serializable
 	}
 
 	public Float getUnitRate() {
-		return this.unitRate;
+		return unitRate;
 	}
 
 	public void setUnitRate(Float unitRate) {
@@ -210,38 +164,17 @@ public class JobMaster implements Serializable
 	}
 
 	public Long getUnitRateSeqNo() {
-		return this.unitRateSeqNo;
+		return unitRateSeqNo;
 	}
 
 	public void setUnitRateSeqNo(Long unitRateSeqNo) {
 		this.unitRateSeqNo = unitRateSeqNo;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (jobSeqNo ^ (jobSeqNo >>> 32));
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		JobMaster other = (JobMaster) obj;
-		if (jobSeqNo != other.jobSeqNo)
-			return false;
-		return true;
-	}
-
-	public JobMaster(Long jobSeqNo, String description, Float discPer, Long discSeqNo, Float discVal, Float duration,
-			Long durationCodeSeqNo, String job, String jobId, Long partySeqNo, String remark, Long specificationSeqNo,
-			String status, Float taxPer, Long taxSeqNo, Float taxVal, Float unitRate, Long unitRateSeqNo) {
+	public JobMaster_DTO(Long jobSeqNo, String description, Float discPer, Long discSeqNo, Float discVal,
+			Float duration, Long durationCodeSeqNo, String job, String jobId, Long partySeqNo, String remark,
+			Long specificationSeqNo, String status, Float taxPer, Long taxSeqNo, Float taxVal, Float unitRate,
+			Long unitRateSeqNo) {
 		super();
 		this.jobSeqNo = jobSeqNo;
 		this.description = description;
@@ -261,6 +194,10 @@ public class JobMaster implements Serializable
 		this.taxVal = taxVal;
 		this.unitRate = unitRate;
 		this.unitRateSeqNo = unitRateSeqNo;
+	}
+
+	public JobMaster_DTO() {
+		super();
 	}
 
 }
