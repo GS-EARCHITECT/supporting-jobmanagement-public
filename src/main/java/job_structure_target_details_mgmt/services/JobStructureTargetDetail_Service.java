@@ -11,21 +11,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import job_structure_target_details_mgmt.model.details.JobStructureTargetDetail;
 import job_structure_target_details_mgmt.model.details.JobStructureTargetDetailPK;
 import job_structure_target_details_mgmt.model.dto.JobStructureTargetDetail_DTO;
-import job_structure_target_details_mgmt.model.repo.JobStructureTargetDetails_Repo;
+import job_structure_target_details_mgmt.model.repo.JobStructureTargetDetailsRead_Repo;
 
-@Service("jobStructureTargetDetailsServ")
+@Service("jobStructureTargetDetailsReadServ")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
-public class JobStructureTargetDetail_Service implements I_JobStructureTargetDetails_Service {
+public class JobStructureTargetDetail_Service implements I_JobStructureTargetDetailsRead_Service {
 
 	// private static final Logger logger =
 	// LoggerFactory.getLogger(JobStructureTargetDetailService.class);
 
 	@Autowired
-	private JobStructureTargetDetails_Repo jobStructureTargetDetailsRepo;
+	private JobStructureTargetDetailsRead_Repo jobStructureTargetDetailsReadRepo;
 
 	@Autowired
 	private Executor asyncExecutor;
@@ -35,7 +34,7 @@ public class JobStructureTargetDetail_Service implements I_JobStructureTargetDet
 			throws InterruptedException, ExecutionException {
 		CompletableFuture<CopyOnWriteArrayList<JobStructureTargetDetail_DTO>> future = CompletableFuture
 				.supplyAsync(() -> {
-					CopyOnWriteArrayList<JobStructureTargetDetail> jobList = (CopyOnWriteArrayList<JobStructureTargetDetail>) jobStructureTargetDetailsRepo
+					CopyOnWriteArrayList<JobStructureTargetDetail> jobList = (CopyOnWriteArrayList<JobStructureTargetDetail>) jobStructureTargetDetailsReadRepo
 							.findAll();
 					CopyOnWriteArrayList<JobStructureTargetDetail_DTO> jobStructureDetailsDTOs = new CopyOnWriteArrayList<JobStructureTargetDetail_DTO>();
 					jobStructureDetailsDTOs = jobList != null ? this.getJobStructureTargetDetail_DTOs(jobList) : null;
@@ -51,7 +50,7 @@ public class JobStructureTargetDetail_Service implements I_JobStructureTargetDet
 		
 		CompletableFuture<CopyOnWriteArrayList<JobStructureTargetDetail_DTO>> future = CompletableFuture
 				.supplyAsync(() -> {
-		CopyOnWriteArrayList<JobStructureTargetDetail> jobStructureTargetDetails = (CopyOnWriteArrayList<JobStructureTargetDetail>) jobStructureTargetDetailsRepo
+		CopyOnWriteArrayList<JobStructureTargetDetail> jobStructureTargetDetails = (CopyOnWriteArrayList<JobStructureTargetDetail>) jobStructureTargetDetailsReadRepo
 				.getSelectJobStructureTargetDetailsForJobs(jobSeqNos);
 		CopyOnWriteArrayList<JobStructureTargetDetail_DTO> jobStructureTargetDetailsDTOs = jobStructureTargetDetails != null
 				? this.getJobStructureTargetDetail_DTOs(jobStructureTargetDetails)
@@ -69,7 +68,7 @@ public class JobStructureTargetDetail_Service implements I_JobStructureTargetDet
 		CompletableFuture<CopyOnWriteArrayList<JobStructureTargetDetail_DTO>> future = CompletableFuture
 				.supplyAsync(() -> {
 
-		CopyOnWriteArrayList<JobStructureTargetDetail> jobStructureTargetDetails = (CopyOnWriteArrayList<JobStructureTargetDetail>) jobStructureTargetDetailsRepo
+		CopyOnWriteArrayList<JobStructureTargetDetail> jobStructureTargetDetails = (CopyOnWriteArrayList<JobStructureTargetDetail>) jobStructureTargetDetailsReadRepo
 				.findAllById(jobStructureTargetDetailPKs);
 		CopyOnWriteArrayList<JobStructureTargetDetail_DTO> jobStructureTargetDetailsDTOs = jobStructureTargetDetails != null
 				? this.getJobStructureTargetDetail_DTOs(jobStructureTargetDetails)
@@ -86,7 +85,7 @@ public class JobStructureTargetDetail_Service implements I_JobStructureTargetDet
 	{
 		CompletableFuture<CopyOnWriteArrayList<JobStructureTargetDetail_DTO>> future = CompletableFuture
 				.supplyAsync(() -> {
-		CopyOnWriteArrayList<JobStructureTargetDetail> jobStructureTargetDetails = (CopyOnWriteArrayList<JobStructureTargetDetail>) jobStructureTargetDetailsRepo
+		CopyOnWriteArrayList<JobStructureTargetDetail> jobStructureTargetDetails = (CopyOnWriteArrayList<JobStructureTargetDetail>) jobStructureTargetDetailsReadRepo
 				.getSelectJobStructureTargetDetailForParents(jobSeqNos, parTargetSeqNos);
 		CopyOnWriteArrayList<JobStructureTargetDetail_DTO> jobStructureTargetDetailsDTOs = jobStructureTargetDetails != null
 				? this.getJobStructureTargetDetail_DTOs(jobStructureTargetDetails)
