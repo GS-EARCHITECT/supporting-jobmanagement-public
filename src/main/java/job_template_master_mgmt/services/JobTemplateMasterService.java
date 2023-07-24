@@ -1,8 +1,9 @@
 package job_template_master_mgmt.services;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import job_template_master_mgmt.model.dto.JobTemplateMasterDTO;
+import job_template_master_mgmt.model.dto.JobTemplateMaster_DTO;
 import job_template_master_mgmt.model.master.JobTemplateMaster;
-import job_template_master_mgmt.model.master.JobTemplateMasterPK;
 import job_template_master_mgmt.model.repo.JobTemplateMasterRepo;
 
 @Service("jobTemplateMasterServ")
@@ -24,137 +24,65 @@ public class JobTemplateMasterService implements I_JobTemplateMasterService
 
 	@Autowired
 	private JobTemplateMasterRepo jobTemplateMasterRepo;
+	
+	@Autowired
+	private Executor asyncExecutor;
 
 	@Override
-	public JobTemplateMasterDTO newJobTemplateMaster(JobTemplateMasterDTO jobStructureDetailsDTO) 
+	public CopyOnWriteArrayList<JobTemplateMaster_DTO> getAllJobTemplateMasters() throws InterruptedException, ExecutionException 
 	{
-		JobTemplateMasterPK jobTemplateMasterPK = new JobTemplateMasterPK();
-		jobTemplateMasterPK.setJobTemplateSeqNo(jobStructureDetailsDTO.getJobTemplateSeqNo());
-		jobTemplateMasterPK.setServiceCategorySeqNo(jobStructureDetailsDTO.getServiceCategorySeqNo());
-		jobTemplateMasterPK.setServiceSeqNo(jobStructureDetailsDTO.getServiceSeqNo());
-		JobTemplateMaster jobTemplateMaster2 = null;
-		JobTemplateMasterDTO jobTemplateMasterDTO = null;
+		CompletableFuture<CopyOnWriteArrayList<JobTemplateMaster_DTO>> future = CompletableFuture.supplyAsync(() -> 
+		{			
+		CopyOnWriteArrayList<JobTemplateMaster> jobList = (CopyOnWriteArrayList<JobTemplateMaster>) jobTemplateMasterRepo.findAll();
+		CopyOnWriteArrayList<JobTemplateMaster_DTO> jobTemplateMasterDTOs = this.getJobTemplateMaster_DTOs(jobList);
+		return jobTemplateMasterDTOs;
+		},asyncExecutor);
 
-		if (!jobTemplateMasterRepo.existsById(jobTemplateMasterPK)) {
-			jobTemplateMaster2 = this.setJobTemplateMaster(jobStructureDetailsDTO);
-			jobTemplateMaster2.setId(jobTemplateMasterPK);
-			jobTemplateMasterDTO = this.getJobTemplateMasterDTO(jobTemplateMaster2);
-		}
-		return jobTemplateMasterDTO;
+		return future.get();
+
 	}
 
 	@Override
-	public ArrayList<JobTemplateMasterDTO> getAllJobTemplateMasters() {
-		ArrayList<JobTemplateMaster> jobList = (ArrayList<JobTemplateMaster>) jobTemplateMasterRepo
-				.findAll();
-		ArrayList<JobTemplateMasterDTO> jobStructureDetailsDTOs = new ArrayList<JobTemplateMasterDTO>();
-		jobStructureDetailsDTOs = jobList != null ? this.getJobTemplateMasterDTOs(jobList) : null;
-		return jobStructureDetailsDTOs;
-	}
-
-	@Override
-	public ArrayList<JobTemplateMasterDTO> getSelectJobTemplateMasters(
-			ArrayList<Long> jobTemplateMasterSeqNos) {
-		ArrayList<JobTemplateMaster> jobTemplateMasters = null;
-		ArrayList<JobTemplateMasterDTO> jobTemplateMasterDTOs = null;
+	public CopyOnWriteArrayList<JobTemplateMaster_DTO> getSelectJobTemplateMasters(CopyOnWriteArrayList<Long> jobTemplateMasterSeqNos) throws InterruptedException, ExecutionException 
+	{
+		CompletableFuture<CopyOnWriteArrayList<JobTemplateMaster_DTO>> future = CompletableFuture.supplyAsync(() -> 
+		{
+		CopyOnWriteArrayList<JobTemplateMaster> jobTemplateMasters = null;
+		CopyOnWriteArrayList<JobTemplateMaster_DTO> jobTemplateMasterDTOs = null;
 
 		if (jobTemplateMasterSeqNos != null) {
-			jobTemplateMasters = jobTemplateMasterRepo
-					.getSelectJobTemplateMasters(jobTemplateMasterSeqNos);
+			jobTemplateMasters = jobTemplateMasterRepo.getSelectJobTemplateMasters(jobTemplateMasterSeqNos);
 			if (jobTemplateMasters != null) {
-				jobTemplateMasterDTOs = this.getJobTemplateMasterDTOs(jobTemplateMasters);
+				jobTemplateMasterDTOs = this.getJobTemplateMaster_DTOs(jobTemplateMasters);
 			}
+		}
+		return jobTemplateMasterDTOs;
+		},asyncExecutor);
+
+		return future.get();		
+	}
+
+	private synchronized CopyOnWriteArrayList<JobTemplateMaster_DTO> getJobTemplateMaster_DTOs(
+			CopyOnWriteArrayList<JobTemplateMaster> jobTemplateMasters)  
+	{
+		JobTemplateMaster_DTO jobTemplateMasterDTO = null;
+		CopyOnWriteArrayList<JobTemplateMaster_DTO> jobTemplateMasterDTOs = new CopyOnWriteArrayList<JobTemplateMaster_DTO>();
+		for (int i = 0; i < jobTemplateMasters.size(); i++) 
+		{
+			jobTemplateMasterDTO = this.getJobTemplateMaster_DTO(jobTemplateMasters.get(i));
+			jobTemplateMasterDTOs.add(jobTemplateMasterDTO);
 		}
 		return jobTemplateMasterDTOs;
 	}
 
-	@Override
-	public JobTemplateMasterDTO getJobTemplateMasterById(Long jobTemplateMasterSeqNo,Long serviceSeqNo, BigDecimal serviceCategorySeqNo) 
+	private JobTemplateMaster_DTO getJobTemplateMaster_DTO(JobTemplateMaster jobTemplateMaster) 
 	{
-		JobTemplateMasterPK jobTemplateMasterPK = new JobTemplateMasterPK();		
-		jobTemplateMasterPK.setJobTemplateSeqNo(jobTemplateMasterSeqNo);
-		jobTemplateMasterPK.setServiceCategorySeqNo(serviceCategorySeqNo);
-		jobTemplateMasterPK.setServiceSeqNo(serviceSeqNo);		
-		Optional<JobTemplateMaster> jobTemplateMaster = jobTemplateMasterRepo.findById(jobTemplateMasterPK);
-		JobTemplateMasterDTO jobTemplateMasterDTO = null;
-
-		if (jobTemplateMaster.isPresent()) {
-			jobTemplateMasterDTO = getJobTemplateMasterDTO(jobTemplateMaster.get());
-		}
-		return jobTemplateMasterDTO;
-	}
-
-	@Override
-	public void updJobTemplateMaster(JobTemplateMasterDTO jobTemplateMasterDTO)
-	{
-		JobTemplateMasterPK jobTemplateMasterPK = new JobTemplateMasterPK();
-		jobTemplateMasterPK.setJobTemplateSeqNo(jobTemplateMasterDTO.getJobTemplateSeqNo());
-		jobTemplateMasterPK.setServiceCategorySeqNo(jobTemplateMasterDTO.getServiceCategorySeqNo());
-		jobTemplateMasterPK.setServiceSeqNo(jobTemplateMasterDTO.getServiceSeqNo());
-		JobTemplateMaster jobTemplateMaster2 = null;
-		Optional<JobTemplateMaster> jobTemplateMaster = jobTemplateMasterRepo.findById(jobTemplateMasterPK);
-
-		if (jobTemplateMaster.isPresent()) {
-			jobTemplateMaster2 = this.setJobTemplateMaster(jobTemplateMasterDTO);
-			jobTemplateMaster2.setId(jobTemplateMasterPK);
-			;
-			jobTemplateMasterRepo.save(jobTemplateMaster2);
-		}
-	}
-
-	@Override
-	public void delJobTemplateMaster(Long jobTemplateMasterSeqNo,Long serviceSeqNo, BigDecimal serviceCategorySeqNo) 
-	{
-		JobTemplateMasterPK jobTemplateMasterPK = new JobTemplateMasterPK();		
-		jobTemplateMasterPK.setJobTemplateSeqNo(jobTemplateMasterSeqNo);
-		jobTemplateMasterPK.setServiceCategorySeqNo(serviceCategorySeqNo);
-		jobTemplateMasterPK.setServiceSeqNo(serviceSeqNo);
-		
-		if (jobTemplateMasterRepo.existsById(jobTemplateMasterPK)) 
-		{
-			jobTemplateMasterRepo.deleteById(jobTemplateMasterPK);
-		}
-	}
-
-	@Override
-	public void delAllJobTemplateMasters() {
-		jobTemplateMasterRepo.deleteAll();
-	}
-
-	@Override
-	public void delSelectJobTemplateMasters(ArrayList<Long> jobTemplateMasterSeqNos) 
-	{
-		jobTemplateMasterRepo.deleteSelectJobTemplateMasters(jobTemplateMasterSeqNos);
-	}
-
-	private ArrayList<JobTemplateMasterDTO> getJobTemplateMasterDTOs(
-			ArrayList<JobTemplateMaster> jobStructureDetailss) {
-		JobTemplateMasterDTO jobStructureDetailsDTO = null;
-		ArrayList<JobTemplateMasterDTO> jobStructureDetailsDTOs = new ArrayList<JobTemplateMasterDTO>();
-
-		for (int i = 0; i < jobStructureDetailss.size(); i++) {
-			jobStructureDetailsDTO = getJobTemplateMasterDTO(jobStructureDetailss.get(i));
-			jobStructureDetailsDTOs.add(jobStructureDetailsDTO);
-		}
-		return jobStructureDetailsDTOs;
-	}
-
-	private JobTemplateMasterDTO getJobTemplateMasterDTO(JobTemplateMaster jobTemplateMaster) 
-	{
-		JobTemplateMasterDTO jobTemplateMasterDTO = new JobTemplateMasterDTO();
+		JobTemplateMaster_DTO jobTemplateMasterDTO = new JobTemplateMaster_DTO();
 		jobTemplateMasterDTO.setJobTemplateSeqNo(jobTemplateMaster.getId().getJobTemplateSeqNo());
-		jobTemplateMasterDTO.setServiceCategorySeqNo(jobTemplateMaster.getId().getServiceCategorySeqNo());
 		jobTemplateMasterDTO.setServiceSeqNo(jobTemplateMaster.getId().getServiceSeqNo());
 		jobTemplateMasterDTO.setRemarks(jobTemplateMaster.getRemarks());
 		jobTemplateMasterDTO.setStatus(jobTemplateMaster.getStatus());
 		return jobTemplateMasterDTO;
 	}
-
-	private JobTemplateMaster setJobTemplateMaster(JobTemplateMasterDTO cDTO) 
-	{
-		JobTemplateMaster jobTemplateMaster = new JobTemplateMaster();	
-		jobTemplateMaster.setRemarks(cDTO.getRemarks());
-		jobTemplateMaster.setStatus(cDTO.getStatus());
-		return jobTemplateMaster;
-	}
+	
 }

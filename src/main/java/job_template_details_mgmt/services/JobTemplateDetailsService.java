@@ -1,8 +1,9 @@
 package job_template_details_mgmt.services;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,153 +12,82 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import job_template_details_mgmt.model.details.JobTemplateDetails;
-import job_template_details_mgmt.model.details.JobTemplateDetailsPK;
-import job_template_details_mgmt.model.dto.JobTemplateDetailsDTO;
+import job_template_details_mgmt.model.dto.JobTemplateDetails_DTO;
 import job_template_details_mgmt.model.repo.JobTemplateDetailsRepo;
 
 @Service("jobTemplateDetailsServ")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 public class JobTemplateDetailsService implements I_JobTemplateDetailsService 
 {
-	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger(JobTemplateDetailsService.class);
+
+//	private static final Logger logger = LoggerFactory.getLogger(JobTemplateDetailsService.class);
 
 	@Autowired
 	private JobTemplateDetailsRepo jobTemplateDetailsRepo;
+	
+	@Autowired
+	private Executor asyncExecutor;
 
 	@Override
-	public JobTemplateDetailsDTO newJobTemplateDetails(JobTemplateDetailsDTO jobTemplateDetailsDTO) 
+	public CopyOnWriteArrayList<JobTemplateDetails_DTO> getAllJobTemplateDetails() throws InterruptedException, ExecutionException 
 	{
-		JobTemplateDetailsPK jobTemplateDetailsPK = new JobTemplateDetailsPK();
-		jobTemplateDetailsPK.setJobTemplateSeqNo(jobTemplateDetailsDTO.getJobTemplateSeqNo());
-		jobTemplateDetailsPK.setJobLevelNo(jobTemplateDetailsDTO.getJobLevelNo());
-		jobTemplateDetailsPK.setJobTypeSeqNo(jobTemplateDetailsDTO.getJobTypeSeqNo());
-		jobTemplateDetailsPK.setSeqNo(jobTemplateDetailsDTO.getSeqNo());
-		jobTemplateDetailsPK.setTargetSeqNo(jobTemplateDetailsDTO.getTargetSeqNo());
-		jobTemplateDetailsPK.setTargetTypeSeqNo(jobTemplateDetailsDTO.getTargetTypeSeqNo());
-		JobTemplateDetails jobTemplateDetails2 = null;
-		JobTemplateDetailsDTO jobTemplateDetailsDTO2 = null;
-
-		if (!jobTemplateDetailsRepo.existsById(jobTemplateDetailsPK)) {
-			jobTemplateDetails2 = this.setJobTemplateDetails(jobTemplateDetailsDTO);
-			jobTemplateDetails2.setId(jobTemplateDetailsPK);
-			jobTemplateDetailsDTO2 = this.getJobTemplateDetailsDTO(jobTemplateDetails2);
-		}
-		return jobTemplateDetailsDTO2;
-	}
-
-	@Override
-	public ArrayList<JobTemplateDetailsDTO> getAllJobTemplateDetails() {
-		ArrayList<JobTemplateDetails> jobList = (ArrayList<JobTemplateDetails>) jobTemplateDetailsRepo
-				.findAll();
-		ArrayList<JobTemplateDetailsDTO> jobTemplateDetailsDTOs = new ArrayList<JobTemplateDetailsDTO>();
+		CompletableFuture<CopyOnWriteArrayList<JobTemplateDetails_DTO>> future = CompletableFuture.supplyAsync(() -> 
+		{			
+		CopyOnWriteArrayList<JobTemplateDetails> jobList = (CopyOnWriteArrayList<JobTemplateDetails>) jobTemplateDetailsRepo.findAll();
+		CopyOnWriteArrayList<JobTemplateDetails_DTO> jobTemplateDetailsDTOs = new CopyOnWriteArrayList<JobTemplateDetails_DTO>();
 		jobTemplateDetailsDTOs = jobList != null ? this.getJobTemplateDetailsDTOs(jobList) : null;
 		return jobTemplateDetailsDTOs;
+		},asyncExecutor);
+
+		return future.get();
+
 	}
 
 	@Override
-	public ArrayList<JobTemplateDetailsDTO> getSelectJobTemplateDetails(
-			ArrayList<Long> jobTemplateDetailsSeqNos) {
-		ArrayList<JobTemplateDetails> jobTemplateDetails = null;
-		ArrayList<JobTemplateDetailsDTO> jobTemplateDetailsDTOs = null;
+	public CopyOnWriteArrayList<JobTemplateDetails_DTO> getSelectJobTemplateDetails(
+			CopyOnWriteArrayList<Long> jobTemplateDetailsSeqNos) throws InterruptedException, ExecutionException 
+	{
+		
+		CompletableFuture<CopyOnWriteArrayList<JobTemplateDetails_DTO>> future = CompletableFuture.supplyAsync(() -> 
+		{
+		CopyOnWriteArrayList<JobTemplateDetails> jobTemplateDetails = null;
+		CopyOnWriteArrayList<JobTemplateDetails_DTO> jobTemplateDetailsDTOs = new CopyOnWriteArrayList<JobTemplateDetails_DTO>();
 
-		if (jobTemplateDetailsSeqNos != null) {
-			jobTemplateDetails = jobTemplateDetailsRepo
-					.getSelectJobTemplateDetails(jobTemplateDetailsSeqNos);
-			if (jobTemplateDetails != null) {
+		if (jobTemplateDetailsSeqNos != null) 
+		{
+			jobTemplateDetails = jobTemplateDetailsRepo.getSelectJobTemplateDetails(jobTemplateDetailsSeqNos);
+			if (jobTemplateDetails != null) 
+			{
 				jobTemplateDetailsDTOs = this.getJobTemplateDetailsDTOs(jobTemplateDetails);
 			}
 		}
-		return jobTemplateDetailsDTOs;
+			return jobTemplateDetailsDTOs;
+		},asyncExecutor);
+
+		return future.get();
+
 	}
 
-	@Override
-	public JobTemplateDetailsDTO getJobTemplateDetailsById(long jobTemplateSeqNo, long jobLevelNo, long seqNo, Long jobTypeSeqNo, long targetSeqNo, BigDecimal targetTypeSeqNo) 
-	{
-		JobTemplateDetailsPK jobTemplateDetailsPK = new JobTemplateDetailsPK();		
-		jobTemplateDetailsPK.setJobTemplateSeqNo(jobTemplateSeqNo);
-		jobTemplateDetailsPK.setJobLevelNo(jobLevelNo);
-		jobTemplateDetailsPK.setJobTypeSeqNo(jobTypeSeqNo);
-		jobTemplateDetailsPK.setSeqNo(seqNo);
-		jobTemplateDetailsPK.setTargetSeqNo(targetSeqNo);
-		jobTemplateDetailsPK.setTargetTypeSeqNo(targetTypeSeqNo);
-		Optional<JobTemplateDetails> jobTemplateDetails = jobTemplateDetailsRepo.findById(jobTemplateDetailsPK);
-		JobTemplateDetailsDTO jobTemplateDetailsDTO = null;
-
-		if (jobTemplateDetails.isPresent()) {
-			jobTemplateDetailsDTO = getJobTemplateDetailsDTO(jobTemplateDetails.get());
-		}
-		return jobTemplateDetailsDTO;
-	}
-
-	@Override
-	public void updJobTemplateDetails(JobTemplateDetailsDTO jobTemplateDetailsDTO)
-	{
-		JobTemplateDetailsPK jobTemplateDetailsPK = new JobTemplateDetailsPK();
-		jobTemplateDetailsPK.setJobTemplateSeqNo(jobTemplateDetailsDTO.getJobTemplateSeqNo());
-		jobTemplateDetailsPK.setJobLevelNo(jobTemplateDetailsDTO.getJobLevelNo());
-		jobTemplateDetailsPK.setJobTypeSeqNo(jobTemplateDetailsDTO.getJobTypeSeqNo());
-		jobTemplateDetailsPK.setSeqNo(jobTemplateDetailsDTO.getSeqNo());
-		jobTemplateDetailsPK.setTargetSeqNo(jobTemplateDetailsDTO.getTargetSeqNo());		
-		JobTemplateDetails jobTemplateDetails2 = null;
-		Optional<JobTemplateDetails> jobTemplateDetails = jobTemplateDetailsRepo.findById(jobTemplateDetailsPK);
-
-		if (jobTemplateDetails.isPresent()) {
-			jobTemplateDetails2 = this.setJobTemplateDetails(jobTemplateDetailsDTO);
-			jobTemplateDetails2.setId(jobTemplateDetailsPK);
-			;
-			jobTemplateDetailsRepo.save(jobTemplateDetails2);
-		}
-	}
-
-	@Override
-	public void delJobTemplateDetails(long jobTemplateSeqNo, long jobLevelNo, long seqNo, Long jobTypeSeqNo, long targetSeqNo, BigDecimal targetTypeSeqNo) 
-	{
-		JobTemplateDetailsPK jobTemplateDetailsPK = new JobTemplateDetailsPK();		
-		jobTemplateDetailsPK.setJobTemplateSeqNo(jobTemplateSeqNo);
-		jobTemplateDetailsPK.setJobLevelNo(jobLevelNo);
-		jobTemplateDetailsPK.setJobTypeSeqNo(jobTypeSeqNo);
-		jobTemplateDetailsPK.setSeqNo(seqNo);
-		jobTemplateDetailsPK.setTargetSeqNo(targetSeqNo);
-		jobTemplateDetailsPK.setTargetTypeSeqNo(targetTypeSeqNo);
-		
-		if (jobTemplateDetailsRepo.existsById(jobTemplateDetailsPK)) 
-		{
-			jobTemplateDetailsRepo.deleteById(jobTemplateDetailsPK);
-		}
-	}
-
-	@Override
-	public void delAllJobTemplateDetails() {
-		jobTemplateDetailsRepo.deleteAll();
-	}
-
-	@Override
-	public void delSelectJobTemplateDetails(ArrayList<Long> jobTemplateDetailsSeqNos) 
-	{
-		jobTemplateDetailsRepo.deleteSelectJobTemplateDetails(jobTemplateDetailsSeqNos);
-	}
-
-	private ArrayList<JobTemplateDetailsDTO> getJobTemplateDetailsDTOs(
-			ArrayList<JobTemplateDetails> jobTemplateDetails) {
-		JobTemplateDetailsDTO jobTemplateDetailsDTO = null;
-		ArrayList<JobTemplateDetailsDTO> jobTemplateDetailsDTOs = new ArrayList<JobTemplateDetailsDTO>();
+	private synchronized CopyOnWriteArrayList<JobTemplateDetails_DTO> getJobTemplateDetailsDTOs(
+			CopyOnWriteArrayList<JobTemplateDetails> jobTemplateDetails) {
+		JobTemplateDetails_DTO jobTemplateDetailsDTO = null;
+		CopyOnWriteArrayList<JobTemplateDetails_DTO> jobTemplateDetailsDTOs = new CopyOnWriteArrayList<JobTemplateDetails_DTO>();
 
 		for (int i = 0; i < jobTemplateDetails.size(); i++) {
-			jobTemplateDetailsDTO = getJobTemplateDetailsDTO(jobTemplateDetails.get(i));
+			jobTemplateDetailsDTO = getJobTemplateDetails_DTO(jobTemplateDetails.get(i));
 			jobTemplateDetailsDTOs.add(jobTemplateDetailsDTO);
 		}
 		return jobTemplateDetailsDTOs;
 	}
 
-	private JobTemplateDetailsDTO getJobTemplateDetailsDTO(JobTemplateDetails jobTemplateDetails) 
+	private synchronized JobTemplateDetails_DTO getJobTemplateDetails_DTO(JobTemplateDetails jobTemplateDetails) 
 	{
-		JobTemplateDetailsDTO jobTemplateDetailsDTO = new JobTemplateDetailsDTO();
+		JobTemplateDetails_DTO jobTemplateDetailsDTO = new JobTemplateDetails_DTO();
 		jobTemplateDetailsDTO.setJobTemplateSeqNo(jobTemplateDetails.getId().getJobTemplateSeqNo());		
-		jobTemplateDetailsDTO.setJobTypeSeqNo(jobTemplateDetails.getId().getJobTypeSeqNo());
+		jobTemplateDetailsDTO.setJobSeqNo(jobTemplateDetails.getId().getJOB_SEQ_NO());
 		jobTemplateDetailsDTO.setSeqNo(jobTemplateDetails.getId().getSeqNo());
 		jobTemplateDetailsDTO.setTargetSeqNo(jobTemplateDetails.getId().getTargetSeqNo());
-		jobTemplateDetailsDTO.setTargetTypeSeqNo(jobTemplateDetails.getId().getTargetTypeSeqNo());
+		jobTemplateDetailsDTO.setTargetClassSeqNo(jobTemplateDetails.getId().getTargetClassSeqNo());
 		jobTemplateDetailsDTO.setJobLevelNo(jobTemplateDetails.getId().getJobLevelNo());
 		jobTemplateDetailsDTO.setDaysPlus(jobTemplateDetailsDTO.getDaysPlus());
 		jobTemplateDetailsDTO.setDurDays(jobTemplateDetailsDTO.getDurDays());
@@ -170,21 +100,5 @@ public class JobTemplateDetailsService implements I_JobTemplateDetailsService
 		jobTemplateDetailsDTO.setPredecessorSeqNo(jobTemplateDetailsDTO.getPredecessorSeqNo());
 		jobTemplateDetailsDTO.setSecondsPlus(jobTemplateDetailsDTO.getSecondsPlus());				
 		return jobTemplateDetailsDTO;
-	}
-
-	private JobTemplateDetails setJobTemplateDetails(JobTemplateDetailsDTO cDTO) 
-	{
-		JobTemplateDetails jobTemplateDetails = new JobTemplateDetails();
-		jobTemplateDetails.setDaysPlus(cDTO.getDaysPlus());
-		jobTemplateDetails.setDurDays(cDTO.getDurDays());
-		jobTemplateDetails.setDurHours(cDTO.getDurHours());
-		jobTemplateDetails.setDurMinutes(cDTO.getDurMinutes());
-		jobTemplateDetails.setDurMonths(cDTO.getDurMonths());
-		jobTemplateDetails.setDurSeconds(cDTO.getDurSeconds());
-		jobTemplateDetails.setHoursPlus(cDTO.getHoursPlus());				
-		jobTemplateDetails.setMinutesPlus(cDTO.getMinutesPlus());
-		jobTemplateDetails.setPredecessorSeqNo(cDTO.getPredecessorSeqNo());
-		jobTemplateDetails.setSecondsPlus(cDTO.getSecondsPlus());				
-		return jobTemplateDetails;
 	}
 }
