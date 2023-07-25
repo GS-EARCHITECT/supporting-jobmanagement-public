@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import job_template_details_read_mgmt.model.details.JobTemplateDetails;
 import job_template_details_read_mgmt.model.dto.JobTemplateDetails_DTO;
 import job_template_details_read_mgmt.model.repo.JobTemplateDetailsRead_Repo;
@@ -30,7 +29,7 @@ public class JobTemplateDetailsRead_Service implements I_JobTemplateDetailsRead_
 	private Executor asyncExecutor;
 
 	@Override
-	public CopyOnWriteArrayList<JobTemplateDetails_DTO> getAllJobTemplateDetails() throws InterruptedException, ExecutionException 
+	public CompletableFuture<CopyOnWriteArrayList<JobTemplateDetails_DTO>> getAllJobTemplateDetails() throws InterruptedException, ExecutionException 
 	{
 		CompletableFuture<CopyOnWriteArrayList<JobTemplateDetails_DTO>> future = CompletableFuture.supplyAsync(() -> 
 		{			
@@ -40,12 +39,12 @@ public class JobTemplateDetailsRead_Service implements I_JobTemplateDetailsRead_
 		return jobTemplateDetailsDTOs;
 		},asyncExecutor);
 
-		return future.get();
+		return future;
 
 	}
 
 	@Override
-	public CopyOnWriteArrayList<JobTemplateDetails_DTO> getSelectJobTemplateDetails(
+	public CompletableFuture<CopyOnWriteArrayList<JobTemplateDetails_DTO>> getSelectJobTemplateDetails(
 			CopyOnWriteArrayList<Long> jobTemplateDetailsSeqNos) throws InterruptedException, ExecutionException 
 	{
 		
@@ -65,7 +64,7 @@ public class JobTemplateDetailsRead_Service implements I_JobTemplateDetailsRead_
 			return jobTemplateDetailsDTOs;
 		},asyncExecutor);
 
-		return future.get();
+		return future;
 
 	}
 

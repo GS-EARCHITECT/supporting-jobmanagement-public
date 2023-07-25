@@ -1,5 +1,6 @@
 package job_template_details_read_mgmt.controller;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,14 @@ public class JobTemplateDetailsRead_Controller
 
 	@GetMapping(value = "/getSelectJobTemplateDetails", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CopyOnWriteArrayList<JobTemplateDetails_DTO>> getSelectJobTemplateDetails(
-			@RequestBody CopyOnWriteArrayList<Long> jobTemplateDetailsSeqNos) {
-		CopyOnWriteArrayList<JobTemplateDetails_DTO> JobTemplateDetails_DTOs=null;
+			@RequestBody CopyOnWriteArrayList<Long> jobTemplateDetailsSeqNos) 
+	{
+		CompletableFuture<CopyOnWriteArrayList<JobTemplateDetails_DTO>> jCompletableFuture=null;
+		CopyOnWriteArrayList<JobTemplateDetails_DTO> jobTemplateDetails_DTOs=null;
 		try {
-			JobTemplateDetails_DTOs = jobTemplateDetailsReadService
-					.getSelectJobTemplateDetails(jobTemplateDetailsSeqNos);
+			
+			jCompletableFuture = jobTemplateDetailsReadService.getSelectJobTemplateDetails(jobTemplateDetailsSeqNos);
+			jobTemplateDetails_DTOs = jCompletableFuture.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,14 +46,18 @@ public class JobTemplateDetailsRead_Controller
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(JobTemplateDetails_DTOs, HttpStatus.OK);
+		return new ResponseEntity<>(jobTemplateDetails_DTOs, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/getAllJobTemplateDetails", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<CopyOnWriteArrayList<JobTemplateDetails_DTO>> getAllJobTemplateDetails() {
-		CopyOnWriteArrayList<JobTemplateDetails_DTO> JobTemplateDetails_DTOs=null;
+	public ResponseEntity<CopyOnWriteArrayList<JobTemplateDetails_DTO>> getAllJobTemplateDetails() 
+	{
+		CompletableFuture<CopyOnWriteArrayList<JobTemplateDetails_DTO>> jCompletableFuture=null;
+		CopyOnWriteArrayList<JobTemplateDetails_DTO> jobTemplateDetails_DTOs=null;
 		try {
-			JobTemplateDetails_DTOs = jobTemplateDetailsReadService.getAllJobTemplateDetails();
+			
+			jCompletableFuture = jobTemplateDetailsReadService.getAllJobTemplateDetails();
+			jobTemplateDetails_DTOs = jCompletableFuture.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,6 +65,6 @@ public class JobTemplateDetailsRead_Controller
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(JobTemplateDetails_DTOs, HttpStatus.OK);
+		return new ResponseEntity<>(jobTemplateDetails_DTOs, HttpStatus.OK);
 	}
 }

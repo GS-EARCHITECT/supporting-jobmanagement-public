@@ -31,7 +31,7 @@ public class JobMasterRead_Service implements I_JobMasterRead_Service
 	private Executor asyncExecutor;
 	
 	@Override
-	public CopyOnWriteArrayList<JobMaster_DTO> getAllJobMasters() throws InterruptedException, ExecutionException 
+	public CompletableFuture<CopyOnWriteArrayList<JobMaster_DTO>> getAllJobMasters() throws InterruptedException, ExecutionException 
 	{
 		CompletableFuture<CopyOnWriteArrayList<JobMaster_DTO>> future = CompletableFuture.supplyAsync(() -> 
 		{
@@ -41,12 +41,12 @@ public class JobMasterRead_Service implements I_JobMasterRead_Service
 		return jcmDTOs;
 		},asyncExecutor);
 
-	return future.get();
+	return future;
 
 	}
 
 	@Override
-	public CopyOnWriteArrayList<JobMaster_DTO> getSelectJobMasters(CopyOnWriteArrayList<Long> jcmSeqNos) throws InterruptedException, ExecutionException 
+	public CompletableFuture<CopyOnWriteArrayList<JobMaster_DTO>> getSelectJobMasters(CopyOnWriteArrayList<Long> jcmSeqNos) throws InterruptedException, ExecutionException 
 {
 		CompletableFuture<CopyOnWriteArrayList<JobMaster_DTO>> future = CompletableFuture.supplyAsync(() -> 
 		{
@@ -56,11 +56,11 @@ public class JobMasterRead_Service implements I_JobMasterRead_Service
 		return jcmDTOs;
 		},asyncExecutor);
 
-	return future.get();
+	return future;
 	}
 
 	@Override
-	public CopyOnWriteArrayList<JobMaster_DTO> getSelectJobMastersByParties(CopyOnWriteArrayList<Long> pids) throws InterruptedException, ExecutionException
+	public CompletableFuture<CopyOnWriteArrayList<JobMaster_DTO>> getSelectJobMastersByParties(CopyOnWriteArrayList<Long> pids) throws InterruptedException, ExecutionException
 {
 		CompletableFuture<CopyOnWriteArrayList<JobMaster_DTO>> future = CompletableFuture.supplyAsync(() -> 
 		{
@@ -70,7 +70,7 @@ public class JobMasterRead_Service implements I_JobMasterRead_Service
 		return jcmDTOs;
 		},asyncExecutor);
 
-	return future.get();
+	return future;
 	}
 
 	

@@ -1,5 +1,6 @@
 package job_template_master_read_mgmt.controller;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,11 @@ public class JobTemplateMasterReadController
 	public ResponseEntity<CopyOnWriteArrayList<JobTemplateMaster_DTO>> getSelectJobTemplateMasters(
 			@RequestBody CopyOnWriteArrayList<Long> jobTemplateMasterSeqNos) 
 	{
-		CopyOnWriteArrayList<JobTemplateMaster_DTO> JobTemplateMaster_DTOs=null;
+		CompletableFuture<CopyOnWriteArrayList<JobTemplateMaster_DTO>> jCompletableFuture = null;
+		CopyOnWriteArrayList<JobTemplateMaster_DTO> jobTemplateMaster_DTOs=null;
 		try {
-			JobTemplateMaster_DTOs = jobTemplateMasterReadService
-					.getSelectJobTemplateMasters(jobTemplateMasterSeqNos);
+			jCompletableFuture = jobTemplateMasterReadService.getSelectJobTemplateMasters(jobTemplateMasterSeqNos);
+			jobTemplateMaster_DTOs = jCompletableFuture.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,14 +45,16 @@ public class JobTemplateMasterReadController
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(JobTemplateMaster_DTOs, HttpStatus.OK);
+		return new ResponseEntity<>(jobTemplateMaster_DTOs, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/getAllJobTemplateMasters", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CopyOnWriteArrayList<JobTemplateMaster_DTO>> getAllJobTemplateMasters() {
-		CopyOnWriteArrayList<JobTemplateMaster_DTO> JobTemplateMaster_DTOs=null;
+		CompletableFuture<CopyOnWriteArrayList<JobTemplateMaster_DTO>> jCompletableFuture = null;
+		CopyOnWriteArrayList<JobTemplateMaster_DTO> jobTemplateMaster_DTOs=null;
 		try {
-			JobTemplateMaster_DTOs = jobTemplateMasterReadService.getAllJobTemplateMasters();
+			jCompletableFuture = jobTemplateMasterReadService.getAllJobTemplateMasters();
+			jobTemplateMaster_DTOs = jCompletableFuture.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -58,7 +62,7 @@ public class JobTemplateMasterReadController
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(JobTemplateMaster_DTOs, HttpStatus.OK);
-	}
+		return new ResponseEntity<>(jobTemplateMaster_DTOs, HttpStatus.OK);
+		}
 	
 }

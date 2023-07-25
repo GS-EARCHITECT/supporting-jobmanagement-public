@@ -1,5 +1,6 @@
 package job_master_read_mgmt.controller;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,11 @@ public class JobMasterRead_Controller {
 	@GetMapping(value = "/getSelectJobMasters", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CopyOnWriteArrayList<JobMaster_DTO>> getSelectJobMasters(
 			@RequestBody CopyOnWriteArrayList<Long> jobMasterSeqNos) {
-		CopyOnWriteArrayList<JobMaster_DTO> JobMaster_DTOs = null;
+		CompletableFuture<CopyOnWriteArrayList<JobMaster_DTO>> jobMaster_DTOs = null;
+		CopyOnWriteArrayList<JobMaster_DTO> jobMasterList = null;
 		try {
-			JobMaster_DTOs = jobMasterReadService.getSelectJobMasters(jobMasterSeqNos);
+			jobMaster_DTOs = jobMasterReadService.getSelectJobMasters(jobMasterSeqNos);
+			jobMasterList = jobMaster_DTOs.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -32,15 +35,17 @@ public class JobMasterRead_Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(JobMaster_DTOs, HttpStatus.OK);
+		return new ResponseEntity<>(jobMasterList, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/getSelectJobMastersByParties", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CopyOnWriteArrayList<JobMaster_DTO>> getSelectJobMastersByParties(
-			@RequestBody CopyOnWriteArrayList<Long> jobMasterSeqNos) {
-		CopyOnWriteArrayList<JobMaster_DTO> JobMaster_DTOs = null;
+			@RequestBody CopyOnWriteArrayList<Long> pids) {
+		CompletableFuture<CopyOnWriteArrayList<JobMaster_DTO>> jobMaster_DTOs = null;
+		CopyOnWriteArrayList<JobMaster_DTO> jobMasterList = null;
 		try {
-			JobMaster_DTOs = jobMasterReadService.getSelectJobMastersByParties(jobMasterSeqNos);
+			jobMaster_DTOs = jobMasterReadService.getSelectJobMastersByParties(pids);
+			jobMasterList = jobMaster_DTOs.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -48,14 +53,16 @@ public class JobMasterRead_Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(JobMaster_DTOs, HttpStatus.OK);
-	}
+		return new ResponseEntity<>(jobMasterList, HttpStatus.OK);	}
 
 	@GetMapping(value = "/getAllJobMasters", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<CopyOnWriteArrayList<JobMaster_DTO>> getAllJobMasters() {
-		CopyOnWriteArrayList<JobMaster_DTO> JobMaster_DTOs = null;
+	public ResponseEntity<CopyOnWriteArrayList<JobMaster_DTO>> getAllJobMasters() 
+	{
+		CompletableFuture<CopyOnWriteArrayList<JobMaster_DTO>> jobMaster_DTOs = null;
+		CopyOnWriteArrayList<JobMaster_DTO> jobMasterList = null;
 		try {
-			JobMaster_DTOs = jobMasterReadService.getAllJobMasters();
+			jobMaster_DTOs = jobMasterReadService.getAllJobMasters();
+			jobMasterList = jobMaster_DTOs.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,7 +70,7 @@ public class JobMasterRead_Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(JobMaster_DTOs, HttpStatus.OK);
-	}
+		return new ResponseEntity<>(jobMasterList, HttpStatus.OK);
+		}
 
 }

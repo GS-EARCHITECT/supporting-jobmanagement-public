@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import job_class_master_read_mgmt.model.dto.JobClassMaster_DTO;
 import job_class_master_read_mgmt.model.master.JobClassMaster;
 import job_class_master_read_mgmt.model.repo.JobClassMasterRead_Repo;
@@ -30,7 +29,7 @@ public class JobClassMasterRead_Service implements I_JobClassMasterRead_Service
 	private Executor asyncExecutor;
 	
 	@Override
-	public CopyOnWriteArrayList<JobClassMaster_DTO> getAllJobClasses() throws InterruptedException, ExecutionException 
+	public CompletableFuture<CopyOnWriteArrayList<JobClassMaster_DTO>> getAllJobClasses() throws InterruptedException, ExecutionException 
 	{
 		CompletableFuture<CopyOnWriteArrayList<JobClassMaster_DTO>> future = CompletableFuture.supplyAsync(() -> 
 		{
@@ -40,12 +39,12 @@ public class JobClassMasterRead_Service implements I_JobClassMasterRead_Service
 		return jcmDTOs;
 		},asyncExecutor);
 
-		return future.get();
+		return future;
 
 	}
 
 	@Override
-	public CopyOnWriteArrayList<JobClassMaster_DTO> getSelectJobClasses(CopyOnWriteArrayList<Long> jcmSeqNos) throws InterruptedException, ExecutionException 
+	public CompletableFuture<CopyOnWriteArrayList<JobClassMaster_DTO>> getSelectJobClasses(CopyOnWriteArrayList<Long> jcmSeqNos) throws InterruptedException, ExecutionException 
 	{
 		CompletableFuture<CopyOnWriteArrayList<JobClassMaster_DTO>> future = CompletableFuture.supplyAsync(() -> 
 		{
@@ -55,7 +54,7 @@ public class JobClassMasterRead_Service implements I_JobClassMasterRead_Service
 		return jcmDTOs;
 		},asyncExecutor);
 
-		return future.get();
+		return future;
 
 	}
 

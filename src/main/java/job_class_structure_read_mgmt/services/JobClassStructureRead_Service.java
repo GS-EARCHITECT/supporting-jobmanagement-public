@@ -30,7 +30,7 @@ public class JobClassStructureRead_Service implements I_JobClassStructureRead_Se
 	private Executor asyncExecutor;
 
 	@Override
-	public CopyOnWriteArrayList<JobClassStructure_DTO> getAllJobClassStructures() throws InterruptedException, ExecutionException 
+	public CompletableFuture<CopyOnWriteArrayList<JobClassStructure_DTO>> getAllJobClassStructures() throws InterruptedException, ExecutionException 
 	{
 		CompletableFuture<CopyOnWriteArrayList<JobClassStructure_DTO>> future = CompletableFuture.supplyAsync(() -> 
 		{
@@ -40,12 +40,12 @@ public class JobClassStructureRead_Service implements I_JobClassStructureRead_Se
 		return jcmDTOs;
 		},asyncExecutor);
 
-		return future.get();
+		return future;
 
 	}
 
 	@Override
-	public CopyOnWriteArrayList<JobClassStructure_DTO> getSelectJobClassStructures(CopyOnWriteArrayList<Long> ids, CopyOnWriteArrayList<Long> pids) throws InterruptedException, ExecutionException 
+	public CompletableFuture<CopyOnWriteArrayList<JobClassStructure_DTO>> getSelectJobClassStructures(CopyOnWriteArrayList<Long> ids, CopyOnWriteArrayList<Long> pids) throws InterruptedException, ExecutionException 
 {
 		CompletableFuture<CopyOnWriteArrayList<JobClassStructure_DTO>> future = CompletableFuture.supplyAsync(() -> 
 		{
@@ -55,11 +55,11 @@ public class JobClassStructureRead_Service implements I_JobClassStructureRead_Se
 		return jcmDTOs;
 		},asyncExecutor);
 
-		return future.get();
+		return future;
 	}
 
 	@Override
-	public CopyOnWriteArrayList<JobClassStructure_DTO> getSelectJobClassesByParents(CopyOnWriteArrayList<Long> ids) throws InterruptedException, ExecutionException 
+	public CompletableFuture<CopyOnWriteArrayList<JobClassStructure_DTO>> getSelectJobClassesByParents(CopyOnWriteArrayList<Long> ids) throws InterruptedException, ExecutionException 
 {
 		CompletableFuture<CopyOnWriteArrayList<JobClassStructure_DTO>> future = CompletableFuture.supplyAsync(() -> 
 		{
@@ -68,11 +68,11 @@ public class JobClassStructureRead_Service implements I_JobClassStructureRead_Se
 		jcmDTOs = jobList != null ? this.getJobClassStructure_DTOs(jobList) : null;
 		return jcmDTOs;
 		},asyncExecutor);
-		return future.get();
+		return future;
 	}
 
 	@Override
-	public CopyOnWriteArrayList<JobClassStructure_DTO> getSelectJobClassesByParties(CopyOnWriteArrayList<Long> ids) throws InterruptedException, ExecutionException 
+	public CompletableFuture<CopyOnWriteArrayList<JobClassStructure_DTO>> getSelectJobClassesByParties(CopyOnWriteArrayList<Long> ids) throws InterruptedException, ExecutionException 
 {
 		CompletableFuture<CopyOnWriteArrayList<JobClassStructure_DTO>> future = CompletableFuture.supplyAsync(() -> 
 		{
@@ -81,7 +81,7 @@ public class JobClassStructureRead_Service implements I_JobClassStructureRead_Se
 		jcmDTOs = jobList != null ? this.getJobClassStructure_DTOs(jobList) : null;
 		return jcmDTOs;
 		},asyncExecutor);
-		return future.get();
+		return future;
 
 	}
 

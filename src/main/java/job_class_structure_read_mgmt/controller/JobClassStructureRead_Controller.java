@@ -1,5 +1,6 @@
 package job_class_structure_read_mgmt.controller;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,13 @@ public class JobClassStructureRead_Controller
 	@GetMapping(value = "/getSelectJobClassStructures", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CopyOnWriteArrayList<JobClassStructure_DTO>> getSelectJobClassStructures(
 			@RequestBody CopyOnWriteArrayList<Long> ids, @RequestBody CopyOnWriteArrayList<Long> pids) {
-		CopyOnWriteArrayList<JobClassStructure_DTO> JobClassStructure_DTOs = null;
+		CompletableFuture<CopyOnWriteArrayList<JobClassStructure_DTO>> jobClassStructure_DTOs = null;
+		CopyOnWriteArrayList<JobClassStructure_DTO> jobClassStructureList = null;
+		
 		try {
-			JobClassStructure_DTOs = jobClassStructureReadService.getSelectJobClassStructures(ids, pids);
+			jobClassStructure_DTOs = jobClassStructureReadService.getSelectJobClassStructures(ids, pids);
+			jobClassStructureList = jobClassStructure_DTOs.get();
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -33,15 +38,19 @@ public class JobClassStructureRead_Controller
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(JobClassStructure_DTOs, HttpStatus.OK);
+		return new ResponseEntity<>(jobClassStructureList, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/getSelectJobClassesByParents", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CopyOnWriteArrayList<JobClassStructure_DTO>> getSelectJobClassesByParents(
 			@RequestBody CopyOnWriteArrayList<Long> ids) {
-		CopyOnWriteArrayList<JobClassStructure_DTO> JobClassStructure_DTOs = null;
+		CompletableFuture<CopyOnWriteArrayList<JobClassStructure_DTO>> jobClassStructure_DTOs = null;
+		CopyOnWriteArrayList<JobClassStructure_DTO> jobClassStructureList = null;
+		
 		try {
-			JobClassStructure_DTOs = jobClassStructureReadService.getSelectJobClassesByParents(ids);
+			jobClassStructure_DTOs = jobClassStructureReadService.getSelectJobClassesByParents(ids);
+			jobClassStructureList = jobClassStructure_DTOs.get();
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -49,15 +58,18 @@ public class JobClassStructureRead_Controller
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(JobClassStructure_DTOs, HttpStatus.OK);
-	}
+		return new ResponseEntity<>(jobClassStructureList, HttpStatus.OK);	}
 
 	@GetMapping(value = "/getSelectJobClassesByParties", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CopyOnWriteArrayList<JobClassStructure_DTO>> getSelectJobClassesByParties(
 			@RequestBody CopyOnWriteArrayList<Long> ids) {
-		CopyOnWriteArrayList<JobClassStructure_DTO> JobClassStructure_DTOs = null;
+		CompletableFuture<CopyOnWriteArrayList<JobClassStructure_DTO>> jobClassStructure_DTOs = null;
+		CopyOnWriteArrayList<JobClassStructure_DTO> jobClassStructureList = null;
+		
 		try {
-			JobClassStructure_DTOs = jobClassStructureReadService.getSelectJobClassesByParties(ids);
+			jobClassStructure_DTOs = jobClassStructureReadService.getSelectJobClassesByParties(ids);
+			jobClassStructureList = jobClassStructure_DTOs.get();
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -65,14 +77,18 @@ public class JobClassStructureRead_Controller
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(JobClassStructure_DTOs, HttpStatus.OK);
-	}
+		return new ResponseEntity<>(jobClassStructureList, HttpStatus.OK);
+		}
 
 	@GetMapping(value = "/getAllJobClassStructures", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CopyOnWriteArrayList<JobClassStructure_DTO>> getAllJobClassStructures() {
-		CopyOnWriteArrayList<JobClassStructure_DTO> JobClassStructure_DTOs = null;
+		CompletableFuture<CopyOnWriteArrayList<JobClassStructure_DTO>> jobClassStructure_DTOs = null;
+		CopyOnWriteArrayList<JobClassStructure_DTO> jobClassStructureList = null;
+		
 		try {
-			JobClassStructure_DTOs = jobClassStructureReadService.getAllJobClassStructures();
+			jobClassStructure_DTOs = jobClassStructureReadService.getAllJobClassStructures();
+			jobClassStructureList = jobClassStructure_DTOs.get();
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,7 +96,6 @@ public class JobClassStructureRead_Controller
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(JobClassStructure_DTOs, HttpStatus.OK);
-	}
+		return new ResponseEntity<>(jobClassStructureList, HttpStatus.OK);	}
 
 }

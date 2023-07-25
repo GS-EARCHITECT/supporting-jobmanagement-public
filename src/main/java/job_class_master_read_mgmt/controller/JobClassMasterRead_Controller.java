@@ -1,5 +1,6 @@
 package job_class_master_read_mgmt.controller;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,11 @@ public class JobClassMasterRead_Controller
 	@GetMapping(value = "/getSelectJobClasses", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CopyOnWriteArrayList<JobClassMaster_DTO>> getSelectJobClassMasters(
 			@RequestBody CopyOnWriteArrayList<Long> jobClassMasterSeqNos) {
-		CopyOnWriteArrayList<JobClassMaster_DTO> JobClassMaster_DTOs=null;
+		CompletableFuture<CopyOnWriteArrayList<JobClassMaster_DTO>> jobClassMaster_DTOs=null;
+		CopyOnWriteArrayList<JobClassMaster_DTO> jobClassMasterList=null;
 		try {
-			JobClassMaster_DTOs = jobClassMasterReadService
-					.getSelectJobClasses(jobClassMasterSeqNos);
+			jobClassMaster_DTOs = jobClassMasterReadService.getSelectJobClasses(jobClassMasterSeqNos);
+			jobClassMasterList=jobClassMaster_DTOs.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,15 +37,17 @@ public class JobClassMasterRead_Controller
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(JobClassMaster_DTOs, HttpStatus.OK);
+		return new ResponseEntity<>(jobClassMasterList, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/getAllJobClasses", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CopyOnWriteArrayList<JobClassMaster_DTO>> getAllJobClassMasters() 
 	{
-		CopyOnWriteArrayList<JobClassMaster_DTO> JobClassMaster_DTOs=null;
+		CompletableFuture<CopyOnWriteArrayList<JobClassMaster_DTO>> jobClassMaster_DTOs=null;
+		CopyOnWriteArrayList<JobClassMaster_DTO> jobClassMasterList=null;
 		try {
-			JobClassMaster_DTOs = jobClassMasterReadService.getAllJobClasses();
+			jobClassMaster_DTOs = jobClassMasterReadService.getAllJobClasses();
+			jobClassMasterList=jobClassMaster_DTOs.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,7 +55,7 @@ public class JobClassMasterRead_Controller
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(JobClassMaster_DTOs, HttpStatus.OK);
+		return new ResponseEntity<>(jobClassMasterList, HttpStatus.OK);
 	}
 
 	}
