@@ -17,181 +17,158 @@ import job_target_read_details.model.repo.JobTargetDetailsRead_Repo;
 
 @Service("jobTargetDetailsReadServ")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
-public class JobTargetDetailsRead_Service implements I_JobTargetDetailsRead_Service 
-{
+public class JobTargetDetailsRead_Service implements I_JobTargetDetailsRead_Service {
 
-//	private static final Logger logger = LoggerFactory.getLogger(JobTargetDetailService.class);
+	// private static final Logger logger =
+	// LoggerFactory.getLogger(JobTargetDetailService.class);
 
 	@Autowired
 	private JobTargetDetailsRead_Repo jobTargetDetailsReadRepo;
 
 	@Autowired
 	private Executor asyncExecutor;
-	
-	@Override
-	public CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> getAllJobTargetDetails() throws InterruptedException, ExecutionException 
-	{
-		CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> future = CompletableFuture.supplyAsync(() -> 
-		{
-		CopyOnWriteArrayList<JobTargetDetail> jobList = (CopyOnWriteArrayList<JobTargetDetail>) jobTargetDetailsReadRepo.findAll();
-		CopyOnWriteArrayList<JobTargetDetail_DTO> jobTargetDetailDTOs = new CopyOnWriteArrayList<JobTargetDetail_DTO>();
-		jobTargetDetailDTOs = jobList != null ? this.getJobTargetDetail_DTOs(jobList) : null;
-		return jobTargetDetailDTOs;
-		},asyncExecutor);
-
-	return future;
-
-	}
-	
-	@Override
-	public CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> getAllJobTargetDetailsByIds(CopyOnWriteArrayList<JobTargetDetailPK> jobTargetDetailsPks) throws InterruptedException, ExecutionException 
-	{
-		CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> future = CompletableFuture.supplyAsync(() -> 
-		{
-		CopyOnWriteArrayList<JobTargetDetail> jobTargetDetails = null;
-		CopyOnWriteArrayList<JobTargetDetail_DTO> jobTargetDetailDTOs = null;
-		if(jobTargetDetailsPks!=null)
-		{
-		jobTargetDetails = (CopyOnWriteArrayList<JobTargetDetail>) jobTargetDetailsReadRepo.findAllById(jobTargetDetailsPks);
-		if (jobTargetDetails != null) 
-		{
-		jobTargetDetailDTOs = this.getJobTargetDetail_DTOs(jobTargetDetails);
-		}		
-		}
-		return jobTargetDetailDTOs;
-		},asyncExecutor);
-
-	return future;
-	}
-
 
 	@Override
-	public CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> getSelectJobTargetDetails(CopyOnWriteArrayList<Long> jobTargetDetailsSeqNos) throws InterruptedException, ExecutionException 
-	{
-		CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> future = CompletableFuture.supplyAsync(() -> 
-		{
-		CopyOnWriteArrayList<JobTargetDetail> jobTargetDetails = null;
-		CopyOnWriteArrayList<JobTargetDetail_DTO> jobTargetDetailDTOs = null;
-		if(jobTargetDetailsSeqNos!=null)
-		{
-		jobTargetDetails = (CopyOnWriteArrayList<JobTargetDetail>) jobTargetDetailsReadRepo.getSelectJobTargetDetails(jobTargetDetailsSeqNos);
-		if (jobTargetDetails != null) 
-		{
-		jobTargetDetailDTOs = this.getJobTargetDetail_DTOs(jobTargetDetails);
-		}		
-		}
-		return jobTargetDetailDTOs;
-		},asyncExecutor);
+	public CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> getAllJobTargetDetails()
+			throws InterruptedException, ExecutionException {
+		CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> future = CompletableFuture.supplyAsync(() -> {
+			CopyOnWriteArrayList<JobTargetDetail> jobList = (CopyOnWriteArrayList<JobTargetDetail>) jobTargetDetailsReadRepo
+					.findAll();
+			CopyOnWriteArrayList<JobTargetDetail_DTO> jobTargetDetailDTOs = new CopyOnWriteArrayList<JobTargetDetail_DTO>();
+			jobTargetDetailDTOs = jobList != null ? this.getJobTargetDetail_DTOs(jobList) : null;
+			return jobTargetDetailDTOs;
+		}, asyncExecutor);
 
-	return future;
+		return future;
 
 	}
 
 	@Override
-	public CompletableFuture<Integer> getJobDurDays(Long jobSeqNo) throws InterruptedException, ExecutionException 
-	{
-		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> 
-		{
-		Integer jobDuration = 0;
-		
-		if(jobSeqNo!=null)
-		{
-		jobDuration = jobTargetDetailsReadRepo.getJobDurDays(jobSeqNo);
-		}
-		return jobDuration;
-		},asyncExecutor);
+	public CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> getAllJobTargetDetailsByIds(
+			CopyOnWriteArrayList<JobTargetDetailPK> jobTargetDetailsPks)
+			throws InterruptedException, ExecutionException {
+		CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> future = CompletableFuture.supplyAsync(() -> {
+			CopyOnWriteArrayList<JobTargetDetail> jobTargetDetails = null;
+			CopyOnWriteArrayList<JobTargetDetail_DTO> jobTargetDetailDTOs = null;
+			if (jobTargetDetailsPks != null) {
+				jobTargetDetails = (CopyOnWriteArrayList<JobTargetDetail>) jobTargetDetailsReadRepo
+						.findAllById(jobTargetDetailsPks);
+				if (jobTargetDetails != null) {
+					jobTargetDetailDTOs = this.getJobTargetDetail_DTOs(jobTargetDetails);
+				}
+			}
+			return jobTargetDetailDTOs;
+		}, asyncExecutor);
 
-	return future;
+		return future;
 	}
 
 	@Override
-	public CompletableFuture<Integer> getJobDurHours(Long jobSeqNo) throws InterruptedException, ExecutionException 
-	{
-		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> 
-		{
-		Integer jobDuration = 0;
-		
-		if(jobSeqNo!=null)
-		{
-		jobDuration = jobTargetDetailsReadRepo.getJobDurHours(jobSeqNo);
-		}
-		return jobDuration;
-		},asyncExecutor);
+	public CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> getSelectJobTargetDetails(
+			CopyOnWriteArrayList<Long> jobTargetDetailsSeqNos) throws InterruptedException, ExecutionException {
+		CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> future = CompletableFuture.supplyAsync(() -> {
+			CopyOnWriteArrayList<JobTargetDetail> jobTargetDetails = null;
+			CopyOnWriteArrayList<JobTargetDetail_DTO> jobTargetDetailDTOs = null;
+			if (jobTargetDetailsSeqNos != null) {
+				jobTargetDetails = (CopyOnWriteArrayList<JobTargetDetail>) jobTargetDetailsReadRepo
+						.getSelectJobTargetDetails(jobTargetDetailsSeqNos);
+				if (jobTargetDetails != null) {
+					jobTargetDetailDTOs = this.getJobTargetDetail_DTOs(jobTargetDetails);
+				}
+			}
+			return jobTargetDetailDTOs;
+		}, asyncExecutor);
 
-	return future;
-	}
-	
-	@Override
-	public CompletableFuture<Integer> getJobDurSeconds(Long jobSeqNo) throws InterruptedException, ExecutionException 
-	{
-		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> 
-		{
-		Integer jobDuration = 0;
-		
-		if(jobSeqNo!=null)
-		{
-		jobDuration = jobTargetDetailsReadRepo.getJobDurSeconds(jobSeqNo);
-		}
-		return jobDuration;
-		},asyncExecutor);
+		return future;
 
-	return future;
 	}
 
 	@Override
-	public CompletableFuture<Integer> getJobDurMinutes(Long jobSeqNo) throws InterruptedException, ExecutionException 
-	{
-		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> 
-		{
-		Integer jobDuration = 0;
-		
-		if(jobSeqNo!=null)
-		{
-		jobDuration = jobTargetDetailsReadRepo.getJobDurMinutes(jobSeqNo);
-		}
-		return jobDuration;
-		},asyncExecutor);
+	public CompletableFuture<Integer> getJobDurDays(Long jobSeqNo) throws InterruptedException, ExecutionException {
+		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+			Integer jobDuration = 0;
 
-	return future;
+			{
+				jobDuration = jobTargetDetailsReadRepo.getJobDurDays(jobSeqNo);
+			}
+			return jobDuration;
+		}, asyncExecutor);
+
+		return future;
 	}
-	
+
 	@Override
-	public CompletableFuture<Integer> getJobDurMonths(Long jobSeqNo) throws InterruptedException, ExecutionException 
-	{
-		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> 
-		{
-		Integer jobDuration = 0;
-		
-		if(jobSeqNo!=null)
-		{
-		jobDuration = jobTargetDetailsReadRepo.getJobDurMonths(jobSeqNo);
-		}
-		return jobDuration;
-		},asyncExecutor);
+	public CompletableFuture<Integer> getJobDurHours(Long jobSeqNo) throws InterruptedException, ExecutionException {
+		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+			Integer jobDuration = 0;
 
-	return future;
+			if (jobSeqNo != null) {
+				jobDuration = jobTargetDetailsReadRepo.getJobDurHours(jobSeqNo);
+			}
+			return jobDuration;
+		}, asyncExecutor);
+
+		return future;
 	}
 
-	
 	@Override
-	public CompletableFuture<Integer> getJobDurWeeks(Long jobSeqNo) throws InterruptedException, ExecutionException 
-	{
-		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> 
-		{
-		Integer jobDuration = 0;
-		
-		if(jobSeqNo!=null)
-		{
-		jobDuration = jobTargetDetailsReadRepo.getJobDurWeeks(jobSeqNo);
-		}
-		return jobDuration;
-		},asyncExecutor);
+	public CompletableFuture<Integer> getJobDurSeconds(Long jobSeqNo) throws InterruptedException, ExecutionException {
+		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+			Integer jobDuration = 0;
 
-	return future;
+			if (jobSeqNo != null) {
+				jobDuration = jobTargetDetailsReadRepo.getJobDurSeconds(jobSeqNo);
+			}
+			return jobDuration;
+		}, asyncExecutor);
+
+		return future;
 	}
-	
-	private synchronized CopyOnWriteArrayList<JobTargetDetail_DTO> getJobTargetDetail_DTOs(CopyOnWriteArrayList<JobTargetDetail> jobTargetDetails) 
-	{
+
+	@Override
+	public CompletableFuture<Integer> getJobDurMinutes(Long jobSeqNo) throws InterruptedException, ExecutionException {
+		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+			Integer jobDuration = 0;
+
+			if (jobSeqNo != null) {
+				jobDuration = jobTargetDetailsReadRepo.getJobDurMinutes(jobSeqNo);
+			}
+			return jobDuration;
+		}, asyncExecutor);
+
+		return future;
+	}
+
+	@Override
+	public CompletableFuture<Integer> getJobDurMonths(Long jobSeqNo) throws InterruptedException, ExecutionException {
+		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+			Integer jobDuration = 0;
+
+			if (jobSeqNo != null) {
+				jobDuration = jobTargetDetailsReadRepo.getJobDurMonths(jobSeqNo);
+			}
+			return jobDuration;
+		}, asyncExecutor);
+
+		return future;
+	}
+
+	@Override
+	public CompletableFuture<Integer> getJobDurWeeks(Long jobSeqNo) throws InterruptedException, ExecutionException {
+		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+			Integer jobDuration = 0;
+
+			if (jobSeqNo != null) {
+				jobDuration = jobTargetDetailsReadRepo.getJobDurWeeks(jobSeqNo);
+			}
+			return jobDuration;
+		}, asyncExecutor);
+
+		return future;
+	}
+
+	private synchronized CopyOnWriteArrayList<JobTargetDetail_DTO> getJobTargetDetail_DTOs(
+			CopyOnWriteArrayList<JobTargetDetail> jobTargetDetails) {
 		JobTargetDetail_DTO jobTargetDetailDTO = null;
 		CopyOnWriteArrayList<JobTargetDetail_DTO> jobTargetDetailDTOs = new CopyOnWriteArrayList<JobTargetDetail_DTO>();
 
@@ -202,8 +179,7 @@ public class JobTargetDetailsRead_Service implements I_JobTargetDetailsRead_Serv
 		return jobTargetDetailDTOs;
 	}
 
-	private JobTargetDetail_DTO getJobTargetDetail_DTO(JobTargetDetail jobTargetDetails) 
-	{
+	private JobTargetDetail_DTO getJobTargetDetail_DTO(JobTargetDetail jobTargetDetails) {
 		JobTargetDetail_DTO jobTargetDetailDTO = new JobTargetDetail_DTO();
 		jobTargetDetailDTO = new JobTargetDetail_DTO();
 		jobTargetDetailDTO.setJobSeqNo(jobTargetDetails.getId().getJobSeqNo());
@@ -217,9 +193,9 @@ public class JobTargetDetailsRead_Service implements I_JobTargetDetailsRead_Serv
 		jobTargetDetailDTO.setDurMinutes(jobTargetDetails.getDurMinutes());
 		jobTargetDetailDTO.setDurSeconds(jobTargetDetails.getDurSeconds());
 		jobTargetDetailDTO.setRateSeqNo(jobTargetDetails.getRateSeqNo());
-		jobTargetDetailDTO.setUnitRate(jobTargetDetails.getUnitRate());		
+		jobTargetDetailDTO.setUnitRate(jobTargetDetails.getUnitRate());
 		jobTargetDetailDTO.setRemarks(jobTargetDetails.getRemarks());
-		jobTargetDetailDTO.setStatus(jobTargetDetails.getStatus());		
+		jobTargetDetailDTO.setStatus(jobTargetDetails.getStatus());
 		return jobTargetDetailDTO;
 	}
 
