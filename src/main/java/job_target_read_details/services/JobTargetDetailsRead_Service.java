@@ -84,12 +84,12 @@ public class JobTargetDetailsRead_Service implements I_JobTargetDetailsRead_Serv
 	}
 
 	@Override
-	public CompletableFuture<Integer> getJobDurDays(Long jobSeqNo) throws InterruptedException, ExecutionException {
-		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
-			Integer jobDuration = 0;
+	public CompletableFuture<Float> getJobDurDays(Long jobSeqNo, Long trgSeqNo) throws InterruptedException, ExecutionException {
+		CompletableFuture<Float> future = CompletableFuture.supplyAsync(() -> {
+			Float jobDuration = (float) 0;
 
 			{
-				jobDuration = jobTargetDetailsReadRepo.getJobDurDays(jobSeqNo);
+				jobDuration = jobTargetDetailsReadRepo.getJobDurDays(jobSeqNo, trgSeqNo);
 			}
 			return jobDuration;
 		}, asyncExecutor);
@@ -98,12 +98,12 @@ public class JobTargetDetailsRead_Service implements I_JobTargetDetailsRead_Serv
 	}
 
 	@Override
-	public CompletableFuture<Integer> getJobDurHours(Long jobSeqNo) throws InterruptedException, ExecutionException {
-		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
-			Integer jobDuration = 0;
+	public CompletableFuture<Float> getJobDurHours(Long jobSeqNo, Long trgSeqNo) throws InterruptedException, ExecutionException {
+		CompletableFuture<Float> future = CompletableFuture.supplyAsync(() -> {
+			Float jobDuration = (float) 0;
 
 			if (jobSeqNo != null) {
-				jobDuration = jobTargetDetailsReadRepo.getJobDurHours(jobSeqNo);
+				jobDuration = jobTargetDetailsReadRepo.getJobDurHours(jobSeqNo, trgSeqNo);
 			}
 			return jobDuration;
 		}, asyncExecutor);
@@ -112,12 +112,12 @@ public class JobTargetDetailsRead_Service implements I_JobTargetDetailsRead_Serv
 	}
 
 	@Override
-	public CompletableFuture<Integer> getJobDurSeconds(Long jobSeqNo) throws InterruptedException, ExecutionException {
-		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
-			Integer jobDuration = 0;
+	public CompletableFuture<Float> getJobDurSeconds(Long jobSeqNo, Long trgSeqNo) throws InterruptedException, ExecutionException {
+		CompletableFuture<Float> future = CompletableFuture.supplyAsync(() -> {
+			Float jobDuration = (float) 0;
 
 			if (jobSeqNo != null) {
-				jobDuration = jobTargetDetailsReadRepo.getJobDurSeconds(jobSeqNo);
+				jobDuration = jobTargetDetailsReadRepo.getJobDurSeconds(jobSeqNo, trgSeqNo);
 			}
 			return jobDuration;
 		}, asyncExecutor);
@@ -126,12 +126,12 @@ public class JobTargetDetailsRead_Service implements I_JobTargetDetailsRead_Serv
 	}
 
 	@Override
-	public CompletableFuture<Integer> getJobDurMinutes(Long jobSeqNo) throws InterruptedException, ExecutionException {
-		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
-			Integer jobDuration = 0;
+	public CompletableFuture<Float> getJobDurMinutes(Long jobSeqNo, Long trgSeqNo) throws InterruptedException, ExecutionException {
+		CompletableFuture<Float> future = CompletableFuture.supplyAsync(() -> {
+			Float jobDuration = (float) 0;
 
 			if (jobSeqNo != null) {
-				jobDuration = jobTargetDetailsReadRepo.getJobDurMinutes(jobSeqNo);
+				jobDuration = jobTargetDetailsReadRepo.getJobDurMinutes(jobSeqNo, trgSeqNo);
 			}
 			return jobDuration;
 		}, asyncExecutor);
@@ -140,12 +140,12 @@ public class JobTargetDetailsRead_Service implements I_JobTargetDetailsRead_Serv
 	}
 
 	@Override
-	public CompletableFuture<Integer> getJobDurMonths(Long jobSeqNo) throws InterruptedException, ExecutionException {
-		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
-			Integer jobDuration = 0;
+	public CompletableFuture<Float> getJobDurMonths(Long jobSeqNo, Long trgSeqNo) throws InterruptedException, ExecutionException {
+		CompletableFuture<Float> future = CompletableFuture.supplyAsync(() -> {
+			Float jobDuration = (float) 0;
 
 			if (jobSeqNo != null) {
-				jobDuration = jobTargetDetailsReadRepo.getJobDurMonths(jobSeqNo);
+				jobDuration = jobTargetDetailsReadRepo.getJobDurMonths(jobSeqNo, trgSeqNo);
 			}
 			return jobDuration;
 		}, asyncExecutor);
@@ -154,12 +154,12 @@ public class JobTargetDetailsRead_Service implements I_JobTargetDetailsRead_Serv
 	}
 
 	@Override
-	public CompletableFuture<Integer> getJobDurWeeks(Long jobSeqNo) throws InterruptedException, ExecutionException {
-		CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
-			Integer jobDuration = 0;
+	public CompletableFuture<Float> getJobDurWeeks(Long jobSeqNo, Long trgSeqNo) throws InterruptedException, ExecutionException {
+		CompletableFuture<Float> future = CompletableFuture.supplyAsync(() -> {
+			Float jobDuration = (float) 0;
 
 			if (jobSeqNo != null) {
-				jobDuration = jobTargetDetailsReadRepo.getJobDurWeeks(jobSeqNo);
+				jobDuration = jobTargetDetailsReadRepo.getJobDurWeeks(jobSeqNo, trgSeqNo);
 			}
 			return jobDuration;
 		}, asyncExecutor);

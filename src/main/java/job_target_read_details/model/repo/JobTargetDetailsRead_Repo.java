@@ -12,24 +12,24 @@ import job_target_read_details.model.master.JobTargetDetailPK;
 @Repository("jobTargetDetailsReadRepo")
 public interface JobTargetDetailsRead_Repo extends JpaRepository<JobTargetDetail, JobTargetDetailPK> 
 {	
-	@Query(value = "SELECT * from  JOB_TYPE_TARGET_DETAILS where JOB_TYPE_SEQ_NO in :jobTargetDetailsSeqNos ORDER BY JOB_TYPE_SEQ_NO",nativeQuery = true) 
+	@Query(value = "SELECT * from  JOB_TARGET_DETAILS where JOB_SEQ_NO in :jobTargetDetailsSeqNos ORDER BY JOB_SEQ_NO",nativeQuery = true) 
 	CopyOnWriteArrayList<JobTargetDetail> getSelectJobTargetDetails(@Param("jobTargetDetailsSeqNos") CopyOnWriteArrayList<Long> jobTargetDetailsSeqNos);
 	
-	@Query(value = "SELECT coalesce(DUR_DAYS,0) from  JOB_TYPE_TARGET_DETAILS where JOB_TYPE_SEQ_NO = :jobSeqNo ",nativeQuery = true) 
-	Integer getJobDurDays(@Param("jobSeqNo") Long jobSeqNo);
+	@Query(value = "SELECT coalesce(DUR_DAYS,0) from  JOB_TARGET_DETAILS where (JOB_SEQ_NO = :jobSeqNo and TARGET_SEQ_NO= :trgSeqNo)",nativeQuery = true) 
+	Float getJobDurDays(@Param("jobSeqNo") Long jobSeqNo, @Param("trgSeqNo") Long trgSeqNo);
 	
-	@Query(value = "SELECT coalesce(DUR_HOURS,0) from  JOB_TYPE_TARGET_DETAILS where JOB_TYPE_SEQ_NO = :jobSeqNo ",nativeQuery = true) 
-	Integer getJobDurHours(@Param("jobSeqNo") Long jobSeqNo);
+	@Query(value = "SELECT coalesce(DUR_HOURS,0) from  JOB_TARGET_DETAILS where (JOB_SEQ_NO = :jobSeqNo and TARGET_SEQ_NO= :trgSeqNo)",nativeQuery = true) 
+	Float getJobDurHours(@Param("jobSeqNo") Long jobSeqNo, @Param("trgSeqNo") Long trgSeqNo);
 	
-	@Query(value = "SELECT coalesce(DUR_SECONDS,0) from  JOB_TYPE_TARGET_DETAILS where JOB_TYPE_SEQ_NO = :jobSeqNo ",nativeQuery = true) 
-	Integer getJobDurSeconds(@Param("jobSeqNo") Long jobSeqNo);
+	@Query(value = "SELECT coalesce(DUR_SECONDS,0) from  JOB_TARGET_DETAILS where (JOB_SEQ_NO = :jobSeqNo and TARGET_SEQ_NO= :trgSeqNo) ",nativeQuery = true) 
+	Float getJobDurSeconds(@Param("jobSeqNo") Long jobSeqNo, @Param("trgSeqNo") Long trgSeqNo);
 	
-	@Query(value = "SELECT coalesce(DUR_MINUTES,0) from  JOB_TYPE_TARGET_DETAILS where JOB_TYPE_SEQ_NO = :jobSeqNo ",nativeQuery = true) 
-	Integer getJobDurMinutes(@Param("jobSeqNo") Long jobSeqNo);
+	@Query(value = "SELECT coalesce(DUR_MINUTES,0) from  JOB_TARGET_DETAILS where (JOB_SEQ_NO = :jobSeqNo and TARGET_SEQ_NO= :trgSeqNo)",nativeQuery = true) 
+	Float getJobDurMinutes(@Param("jobSeqNo") Long jobSeqNo, @Param("trgSeqNo") Long trgSeqNo);
 	
-	@Query(value = "SELECT coalesce(DUR_WEEKS,0) from JOB_TYPE_TARGET_DETAILS where JOB_TYPE_SEQ_NO = :jobSeqNo ",nativeQuery = true) 
-	Integer getJobDurWeeks(@Param("jobSeqNo") Long jobSeqNo);
+	@Query(value = "SELECT coalesce(DUR_WEEKS,0) from JOB_TARGET_DETAILS where (JOB_SEQ_NO = :jobSeqNo and TARGET_SEQ_NO= :trgSeqNo) ",nativeQuery = true) 
+	Float getJobDurWeeks(@Param("jobSeqNo") Long jobSeqNo, @Param("trgSeqNo") Long trgSeqNo);
 			
-	@Query(value = "SELECT coalesce(DUR_MONTHS,0) from  JOB_TYPE_TARGET_DETAILS where JOB_TYPE_SEQ_NO = :jobSeqNo ",nativeQuery = true) 
-	Integer getJobDurMonths(@Param("jobSeqNo") Long jobSeqNo);	
+	@Query(value = "SELECT coalesce(DUR_MONTHS,0) from  JOB_TARGET_DETAILS where (JOB_SEQ_NO = :jobSeqNo and TARGET_SEQ_NO= :trgSeqNo)",nativeQuery = true) 
+	Float getJobDurMonths(@Param("jobSeqNo") Long jobSeqNo, @Param("trgSeqNo") Long trgSeqNo);	
 }

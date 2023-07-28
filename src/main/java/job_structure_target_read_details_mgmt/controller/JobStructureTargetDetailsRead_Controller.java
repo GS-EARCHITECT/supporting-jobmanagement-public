@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import job_structure_target_read_details_mgmt.model.details.JobStructureTargetDetailPK;
 import job_structure_target_read_details_mgmt.model.dto.JobStructureTargetDetail_DTO;
 import job_structure_target_read_details_mgmt.services.I_JobStructureTargetDetailsRead_Service;
+import job_target_read_details.model.dto.IdsList_DTO;
 
 @RestController
 @RequestMapping("/jobStructureTargetDetailsReadMgmt")
@@ -69,6 +70,28 @@ public class JobStructureTargetDetailsRead_Controller {
 		CopyOnWriteArrayList<JobStructureTargetDetail_DTO> jobStructureTargetDetail_DTOs = null;
 		try {
 			jCompletableFuture = jobStructureTargetDetailsReadService.getSelectJobStructureTargetDetailsForJobs(ids);
+			jobStructureTargetDetail_DTOs = jCompletableFuture.get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(jobStructureTargetDetail_DTOs, HttpStatus.OK);
+	}
+
+	
+	@GetMapping(value = "/getSelectJobStructureTargetDetailsForParents", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<CopyOnWriteArrayList<JobStructureTargetDetail_DTO>> getSelectJobStructureTargetDetailsForParents(
+			@RequestBody IdsList_DTO idsList_DTO)
+	{
+		CopyOnWriteArrayList<Long> ids = idsList_DTO.getIds();
+		CopyOnWriteArrayList<Long> tids = idsList_DTO.getTids();
+		CompletableFuture<CopyOnWriteArrayList<JobStructureTargetDetail_DTO>> jCompletableFuture = null;
+		CopyOnWriteArrayList<JobStructureTargetDetail_DTO> jobStructureTargetDetail_DTOs = null;
+		try {
+			jCompletableFuture = jobStructureTargetDetailsReadService.getSelectJobStructureTargetDetailsForParents(ids, tids);
 			jobStructureTargetDetail_DTOs = jCompletableFuture.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

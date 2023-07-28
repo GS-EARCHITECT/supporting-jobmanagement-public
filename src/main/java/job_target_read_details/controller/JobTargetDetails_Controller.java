@@ -69,13 +69,13 @@ public class JobTargetDetails_Controller
 		return new ResponseEntity<>(jobTargetDetailList, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/getJobDurDays/{jobSeqNo}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<Integer> getJobDurDays(@PathVariable Long jobSeqNo) 
+	@GetMapping(value = "/getJobDurDays/{jobSeqNo}/{trgSeqNo}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<Float> getJobDurDays(@PathVariable Long jobSeqNo, @PathVariable Long trgSeqNo) 
 	{
-		CompletableFuture<Integer> completableFuture = null;
-		Integer jobDur = 0;
+		CompletableFuture<Float> completableFuture = null;
+		Float jobDur = (float) 0;
 		try {
-			completableFuture = jobTargetDetailsReadService.getJobDurDays(jobSeqNo);
+			completableFuture = jobTargetDetailsReadService.getJobDurDays(jobSeqNo, trgSeqNo);
 			jobDur = completableFuture.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -88,13 +88,13 @@ public class JobTargetDetails_Controller
 		return new ResponseEntity<>(jobDur, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/getJobDurHours/{jobSeqNo}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<Integer> getJobDurHours(@PathVariable Long jobSeqNo) 
+	@GetMapping(value = "/getJobDurHours/{jobSeqNo}/{trgSeqNo}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<Float> getJobDurHours(@PathVariable Long jobSeqNo, @PathVariable Long trgSeqNo) 
 	{
-		CompletableFuture<Integer> completableFuture = null;
-		Integer jobDur = 0;
+		CompletableFuture<Float> completableFuture = null;
+		Float jobDur = (float) 0;
 		try {
-			completableFuture = jobTargetDetailsReadService.getJobDurHours(jobSeqNo);
+			completableFuture = jobTargetDetailsReadService.getJobDurHours(jobSeqNo, trgSeqNo);
 			jobDur = completableFuture.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -107,13 +107,13 @@ public class JobTargetDetails_Controller
 		return new ResponseEntity<>(jobDur, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/getJobDurSeconds/{jobSeqNo}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<Integer> getJobDurSeconds(@PathVariable Long jobSeqNo) 
+	@GetMapping(value = "/getJobDurSeconds/{jobSeqNo}/{trgSeqNo}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<Float> getJobDurSeconds(@PathVariable Long jobSeqNo, @PathVariable Long trgSeqNo) 
 	{
-		CompletableFuture<Integer> completableFuture = null;
-		Integer jobDur = 0;
+		CompletableFuture<Float> completableFuture = null;
+		Float jobDur = (float) 0;
 		try {
-			completableFuture = jobTargetDetailsReadService.getJobDurSeconds(jobSeqNo);
+			completableFuture = jobTargetDetailsReadService.getJobDurSeconds(jobSeqNo, trgSeqNo);
 			jobDur = completableFuture.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -126,13 +126,13 @@ public class JobTargetDetails_Controller
 		return new ResponseEntity<>(jobDur, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/getJobDurMinutes/{jobSeqNo}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<Integer> getJobDurMinutes(@PathVariable Long jobSeqNo) 
+	@GetMapping(value = "/getJobDurMinutes/{jobSeqNo}/{trgSeqNo}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<Float> getJobDurMinutes(@PathVariable Long jobSeqNo, @PathVariable Long trgSeqNo) 
 	{
-		CompletableFuture<Integer> completableFuture = null;
-		Integer jobDur = 0;
+		CompletableFuture<Float> completableFuture = null;
+		Float jobDur = (float) 0;
 		try {
-			completableFuture = jobTargetDetailsReadService.getJobDurMinutes(jobSeqNo);
+			completableFuture = jobTargetDetailsReadService.getJobDurMinutes(jobSeqNo, trgSeqNo);
 			jobDur = completableFuture.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -145,13 +145,13 @@ public class JobTargetDetails_Controller
 		return new ResponseEntity<>(jobDur, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/getJobDurWeeks/{jobSeqNo}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<Integer> getJobDurWeeks(@PathVariable Long jobSeqNo) 
+	@GetMapping(value = "/getJobDurWeeks/{jobSeqNo}/{trgSeqNo}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<Float> getJobDurWeeks(@PathVariable Long jobSeqNo, @PathVariable Long trgSeqNo)
 	{
-		CompletableFuture<Integer> completableFuture = null;
-		Integer jobDur = 0;
+		CompletableFuture<Float> completableFuture = null;
+		Float jobDur = (float) 0;
 		try {
-			completableFuture = jobTargetDetailsReadService.getJobDurWeeks(jobSeqNo);
+			completableFuture = jobTargetDetailsReadService.getJobDurWeeks(jobSeqNo, trgSeqNo);
 			jobDur = completableFuture.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -164,13 +164,13 @@ public class JobTargetDetails_Controller
 		return new ResponseEntity<>(jobDur, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/getJobDurMonths/{jobSeqNo}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<Integer> getJobDurMonths(@PathVariable Long jobSeqNo) 
+	@GetMapping(value = "/getJobDurMonths/{jobSeqNo}/{trgSeqNo}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<Float> getJobDurMonths(@PathVariable Long jobSeqNo, @PathVariable Long trgSeqNo)
 	{
-		CompletableFuture<Integer> completableFuture = null;
-		Integer jobDur = 0;
+		CompletableFuture<Float> completableFuture = null;
+		Float jobDur = (float) 0;
 		try {
-			completableFuture = jobTargetDetailsReadService.getJobDurMonths(jobSeqNo);
+			completableFuture = jobTargetDetailsReadService.getJobDurMonths(jobSeqNo, trgSeqNo);
 			jobDur = completableFuture.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

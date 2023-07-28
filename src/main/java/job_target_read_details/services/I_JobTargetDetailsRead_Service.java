@@ -12,10 +12,10 @@ public interface I_JobTargetDetailsRead_Service
 	public CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> getAllJobTargetDetails() throws InterruptedException, ExecutionException;
 	public CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> getAllJobTargetDetailsByIds(CopyOnWriteArrayList<JobTargetDetailPK> jobTargetDetailsPks) throws InterruptedException, ExecutionException;
 	public CompletableFuture<CopyOnWriteArrayList<JobTargetDetail_DTO>> getSelectJobTargetDetails(CopyOnWriteArrayList<Long> jobTargetDetailsSeqNos) throws InterruptedException, ExecutionException;
-	public CompletableFuture<Integer> getJobDurDays(Long jobSeqNo) throws InterruptedException, ExecutionException;
-	public CompletableFuture<Integer> getJobDurHours(Long jobSeqNo) throws InterruptedException, ExecutionException;
-	public CompletableFuture<Integer> getJobDurSeconds(Long jobSeqNo) throws InterruptedException, ExecutionException;
-	public CompletableFuture<Integer> getJobDurMinutes(Long jobSeqNo) throws InterruptedException, ExecutionException;
-	public CompletableFuture<Integer> getJobDurWeeks(Long jobSeqNo) throws InterruptedException, ExecutionException;
-	public CompletableFuture<Integer> getJobDurMonths(Long jobSeqNo) throws InterruptedException, ExecutionException;
+	public CompletableFuture<Float> getJobDurDays(Long jobSeqNo, Long trgSeqNo) throws InterruptedException, ExecutionException;
+	public CompletableFuture<Float> getJobDurHours(Long jobSeqNo, Long trgSeqNo) throws InterruptedException, ExecutionException;
+	public CompletableFuture<Float> getJobDurSeconds(Long jobSeqNo, Long trgSeqNo) throws InterruptedException, ExecutionException;
+	public CompletableFuture<Float> getJobDurMinutes(Long jobSeqNo, Long trgSeqNo) throws InterruptedException, ExecutionException;
+	public CompletableFuture<Float> getJobDurWeeks(Long jobSeqNo, Long trgSeqNo) throws InterruptedException, ExecutionException;
+	public CompletableFuture<Float> getJobDurMonths(Long jobSeqNo, Long trgSeqNo) throws InterruptedException, ExecutionException;
 }
