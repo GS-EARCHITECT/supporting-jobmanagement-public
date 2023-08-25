@@ -18,4 +18,6 @@ public interface JobStructureTargetDetailsRead_Repo extends JpaRepository<JobStr
 	@Query(value = "SELECT * from JOB_STRUCTURE_TARGET_DETAILS where (par_JOB_SEQ_NO in :jobSeqNos and par_target_SEQ_NO in :parTargetSeqNos) ORDER BY SEQ_NO",nativeQuery = true) 
 	CopyOnWriteArrayList<JobStructureTargetDetail> getSelectJobStructureTargetDetailForParents(@Param(value = "jobSeqNos") CopyOnWriteArrayList<Long> jobSeqNos, @Param(value = "parTargetSeqNo") CopyOnWriteArrayList<Long> parTargetSeqNos);
 	
+	@Query(value = "SELECT * from JOB_STRUCTURE_TARGET_DETAILS where (par_JOB_SEQ_NO = :jobSeqNo and par_target_SEQ_NO = :parTargetSeqNo) ORDER BY SEQ_NO",nativeQuery = true) 
+	CopyOnWriteArrayList<JobStructureTargetDetail> getSelectJobStructureTargetDetailForParent(@Param(value = "jobSeqNo") Long jobSeqNo, @Param(value = "parTargetSeqNo") Long parTargetSeqNo);
 }
