@@ -15,7 +15,10 @@ public interface JobTemplateDetailsRead_Repo extends CrudRepository<JobTemplateD
 	@Query(value = "SELECT * JOB_TEMPLATE_DETAILS where JOB_TEMPLATE_SEQ_NO in :jobTemplateDetailsSeqNos ORDER BY JOB_TEMPLATE_SEQ_NO", nativeQuery = true)
 	CopyOnWriteArrayList<JobTemplateDetails> getSelectJobTemplateDetails(@Param("jobTemplateDetailsSeqNos") CopyOnWriteArrayList<Long> jobTemplateDetailsSeqNos);
 	
-	@Query(value = "SELECT * FROM JOB_TEMPLATE_DETAILS where job_template_seq_no = :jobTemplateSeqNo ORDER BY seq_no",nativeQuery = true) 
+	@Query(value = "SELECT * FROM JOB_TEMPLATE_DETAILS where job_template_seq_no = :jobTemplateSeqNo ORDER BY JOB_TEMPLATE_SEQ_NO",nativeQuery = true) 
 	CopyOnWriteArrayList<JobTemplateDetails> getJobsForTemplate(@Param("jobTemplateSeqNo") Long jobTemplateSeqNo);
+
+	@Query(value = "SELECT * JOB_TEMPLATE_DETAILS ORDER BY JOB_TEMPLATE_SEQ_NO", nativeQuery = true)
+	CopyOnWriteArrayList<JobTemplateDetails> getAllJobTemplateDetails();
 	
 }

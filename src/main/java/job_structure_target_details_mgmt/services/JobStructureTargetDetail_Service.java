@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import job_structure_target_details_mgmt.model.details.JobStructureTargetDetail;
 import job_structure_target_details_mgmt.model.details.JobStructureTargetDetailPK;
 import job_structure_target_details_mgmt.model.dto.JobStructureTargetDetail_DTO;

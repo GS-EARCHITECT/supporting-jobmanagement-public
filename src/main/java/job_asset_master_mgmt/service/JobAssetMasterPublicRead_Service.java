@@ -27,8 +27,7 @@ public class JobAssetMasterPublicRead_Service implements I_JobAssetMasterPublicR
 
 	public CompletableFuture<CopyOnWriteArrayList<JobAssetMaster_DTO>> getAllJobAssets() {
 		CompletableFuture<CopyOnWriteArrayList<JobAssetMaster_DTO>> future = CompletableFuture.supplyAsync(() -> {
-			CopyOnWriteArrayList<JobAssetMaster> assetList = (CopyOnWriteArrayList<JobAssetMaster>) jobAssetMasterPublicReadRepo
-					.findAll();
+			CopyOnWriteArrayList<JobAssetMaster> assetList = (CopyOnWriteArrayList<JobAssetMaster>) jobAssetMasterPublicReadRepo.getAllJobAssets();
 			CopyOnWriteArrayList<JobAssetMaster_DTO> lMasterss = assetList != null
 					? this.getJobAssetMaster_DTOs(assetList)
 					: null;

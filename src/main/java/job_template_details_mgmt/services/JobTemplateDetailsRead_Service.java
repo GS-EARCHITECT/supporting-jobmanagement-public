@@ -11,14 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import job_template_details_mgmt.model.details.JobTemplateDetails;
 import job_template_details_mgmt.model.dto.JobTemplateDetails_DTO;
 import job_template_details_mgmt.model.repo.JobTemplateDetailsRead_Repo;
 
 @Service("jobTemplateDetailsServ")
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
-public class JobTemplateDetailsRead_Service implements I_JobTemplateDetailsRead_Service 
+public class JobTemplateDetailsRead_Service implements I_JobTemplateDetailsPublicRead_Service 
 {
 
 //	private static final Logger logger = LoggerFactory.getLogger(JobTemplateDetailsService.class);
@@ -30,11 +29,11 @@ public class JobTemplateDetailsRead_Service implements I_JobTemplateDetailsRead_
 	private Executor asyncExecutor;
 
 	@Override
-	public CompletableFuture<CopyOnWriteArrayList<JobTemplateDetails_DTO>> getAllJobTemplateDetails() throws InterruptedException, ExecutionException 
+	public CompletableFuture<CopyOnWriteArrayList<JobTemplateDetails_DTO>> getAllJobTemplateDetails()  
 	{
 		CompletableFuture<CopyOnWriteArrayList<JobTemplateDetails_DTO>> future = CompletableFuture.supplyAsync(() -> 
 		{			
-		CopyOnWriteArrayList<JobTemplateDetails> jobList = (CopyOnWriteArrayList<JobTemplateDetails>) jobTemplateDetailsReadRepo.findAll();
+		CopyOnWriteArrayList<JobTemplateDetails> jobList = (CopyOnWriteArrayList<JobTemplateDetails>) jobTemplateDetailsReadRepo.getAllJobTemplateDetails();
 		CopyOnWriteArrayList<JobTemplateDetails_DTO> jobTemplateDetailsDTOs = new CopyOnWriteArrayList<JobTemplateDetails_DTO>();
 		jobTemplateDetailsDTOs = jobList != null ? this.getJobTemplateDetailsDTOs(jobList) : null;
 		return jobTemplateDetailsDTOs;
@@ -46,27 +45,18 @@ public class JobTemplateDetailsRead_Service implements I_JobTemplateDetailsRead_
 
 	@Override
 	public CompletableFuture<CopyOnWriteArrayList<JobTemplateDetails_DTO>> getSelectJobTemplateDetails(
-			CopyOnWriteArrayList<Long> jobTemplateDetailsSeqNos) throws InterruptedException, ExecutionException 
+			CopyOnWriteArrayList<Long> jobTemplateDetailsSeqNos) 
 	{
 		
 		CompletableFuture<CopyOnWriteArrayList<JobTemplateDetails_DTO>> future = CompletableFuture.supplyAsync(() -> 
-		{
-		CopyOnWriteArrayList<JobTemplateDetails> jobTemplateDetails = null;
+		{			
+		CopyOnWriteArrayList<JobTemplateDetails> jobList = (CopyOnWriteArrayList<JobTemplateDetails>) jobTemplateDetailsReadRepo.getSelectJobTemplateDetails(jobTemplateDetailsSeqNos);
 		CopyOnWriteArrayList<JobTemplateDetails_DTO> jobTemplateDetailsDTOs = new CopyOnWriteArrayList<JobTemplateDetails_DTO>();
-
-		if (jobTemplateDetailsSeqNos != null) 
-		{
-			jobTemplateDetails = jobTemplateDetailsReadRepo.getSelectJobTemplateDetails(jobTemplateDetailsSeqNos);
-			if (jobTemplateDetails != null) 
-			{
-				jobTemplateDetailsDTOs = this.getJobTemplateDetailsDTOs(jobTemplateDetails);
-			}
-		}
-			return jobTemplateDetailsDTOs;
+		jobTemplateDetailsDTOs = jobList != null ? this.getJobTemplateDetailsDTOs(jobList) : null;
+		return jobTemplateDetailsDTOs;
 		},asyncExecutor);
 
 		return future;
-
 	}
 
 	private synchronized CopyOnWriteArrayList<JobTemplateDetails_DTO> getJobTemplateDetailsDTOs(

@@ -11,6 +11,10 @@ import job_asset_master_mgmt.model.master.JobAssetMasterPK;
 @Repository("jobAssetMasterPublicReadRepo")
 public interface JobAssetMasterPublicRead_Repo extends JpaRepository<JobAssetMaster, JobAssetMasterPK> 
 {
+
+	@Query(value = "SELECT * FROM JOB_ASSET_MASTER a  order by asset_seq_no", nativeQuery = true)
+	CopyOnWriteArrayList<JobAssetMaster> getAllJobAssets();
+	
 	@Query(value = "SELECT * FROM JOB_ASSET_MASTER a WHERE a.job_seq_no in :jobSeqNos order by asset_seq_no", nativeQuery = true)
 	CopyOnWriteArrayList<JobAssetMaster> getSelectAssetsByJobs(@Param("jobSeqNos") CopyOnWriteArrayList<Long> jobSeqNos);
 	
