@@ -12,4 +12,5 @@ public interface I_JobAssetMasterPublicRead_Service
 	public CompletableFuture<CopyOnWriteArrayList<JobAssetMaster_DTO>> getSelectJobAssetsByJobs( CopyOnWriteArrayList<Long> jobSeqNos);
 	public CompletableFuture<CopyOnWriteArrayList<JobAssetMaster_DTO>> getSelectJobAssetsByTargets( CopyOnWriteArrayList<Long> trgSeqNos);
 	public CompletableFuture<CopyOnWriteArrayList<JobAssetMaster_DTO>> getSelectJobAssetsByAssets( CopyOnWriteArrayList<Long> assetSeqNos);		
+	public CompletableFuture<CopyOnWriteArrayList<JobAssetMaster_DTO>> getSelectAssetsByDirection(Character dFlag);
 }

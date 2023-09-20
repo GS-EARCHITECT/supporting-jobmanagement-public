@@ -10,5 +10,5 @@ public interface I_JobResourceMasterPublicRead_Service
 	public CompletableFuture<CopyOnWriteArrayList<JobResourceMaster_DTO>> getSelectJobResourcesByJobs( CopyOnWriteArrayList<Long> jobSeqNos);
 	public CompletableFuture<CopyOnWriteArrayList<JobResourceMaster_DTO>> getSelectJobResourcesByTargets( CopyOnWriteArrayList<Long> trgSeqNos);
 	public CompletableFuture<CopyOnWriteArrayList<JobResourceMaster_DTO>> getSelectJobResourcesByResources( CopyOnWriteArrayList<Long> resourceSeqNos);		
-
+	public CompletableFuture<CopyOnWriteArrayList<JobResourceMaster_DTO>> getSelectJobResourcesByDirection( Character dFlag);
 }

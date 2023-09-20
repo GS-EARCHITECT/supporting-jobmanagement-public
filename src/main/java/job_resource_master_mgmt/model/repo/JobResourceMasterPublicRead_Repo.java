@@ -23,4 +23,7 @@ public interface JobResourceMasterPublicRead_Repo extends JpaRepository<JobResou
 	@Query(value = "SELECT * FROM JOB_RESOURCE_MASTER a WHERE a.resource_seq_no in :resourceSeqNos order by resource_seq_no", nativeQuery = true)
 	CopyOnWriteArrayList<JobResourceMaster> getSelectResourcesByResources(@Param("resourceSeqNos") CopyOnWriteArrayList<Long> resourceSeqNos);
 	
+	@Query(value = "SELECT * FROM JOB_RESOURCE_MASTER a WHERE upper(trim(a.directionflag)) = upper(trim(:dFlag)) order by resource_seq_no", nativeQuery = true)
+	CopyOnWriteArrayList<JobResourceMaster> getSelectResourcesByDirection(@Param("dFlag") Character dFlag);
+	
 }

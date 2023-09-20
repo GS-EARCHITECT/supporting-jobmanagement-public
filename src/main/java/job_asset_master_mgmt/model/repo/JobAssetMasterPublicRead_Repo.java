@@ -24,4 +24,7 @@ public interface JobAssetMasterPublicRead_Repo extends JpaRepository<JobAssetMas
 	@Query(value = "SELECT * FROM JOB_ASSET_MASTER a WHERE a.asset_seq_no in :assetSeqNos order by asset_seq_no", nativeQuery = true)
 	CopyOnWriteArrayList<JobAssetMaster> getSelectAssetsByAssets(@Param("assetSeqNos") CopyOnWriteArrayList<Long> assetSeqNos);
 	
+	@Query(value = "SELECT * FROM JOB_ASSET_MASTER a WHERE upper(trim(a.directionflag)) = upper(trim(:dFlag)) order by asset_seq_no", nativeQuery = true)
+	CopyOnWriteArrayList<JobAssetMaster> getSelectAssetsByDirection(@Param("dFlag") Character dFlag);
+	
 	}

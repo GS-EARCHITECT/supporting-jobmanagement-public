@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +38,15 @@ public class JobResourceMasterPublicRead_Controller {
 	public ResponseEntity<CopyOnWriteArrayList<JobResourceMaster_DTO>> getSelectJobResourcesByJobs(
 			@RequestBody CopyOnWriteArrayList<Long> jobSeqNos) {
 		CompletableFuture<CopyOnWriteArrayList<JobResourceMaster_DTO>> completableFuture = jobResourceMasterPublicReadServ.getSelectJobResourcesByJobs(jobSeqNos);
+		CopyOnWriteArrayList<JobResourceMaster_DTO> resourceDTOs = completableFuture.join();
+		return new ResponseEntity<>(resourceDTOs, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/getSelectJobResourcesByDirection/{dFlag}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<CopyOnWriteArrayList<JobResourceMaster_DTO>> getSelectJobResourcesByDirection(
+			@PathVariable Character dFlag) 
+	{
+		CompletableFuture<CopyOnWriteArrayList<JobResourceMaster_DTO>> completableFuture = jobResourceMasterPublicReadServ.getSelectJobResourcesByDirection(dFlag);
 		CopyOnWriteArrayList<JobResourceMaster_DTO> resourceDTOs = completableFuture.join();
 		return new ResponseEntity<>(resourceDTOs, HttpStatus.OK);
 	}

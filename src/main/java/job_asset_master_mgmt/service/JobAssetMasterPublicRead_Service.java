@@ -62,6 +62,19 @@ public class JobAssetMasterPublicRead_Service implements I_JobAssetMasterPublicR
 		return future;
 	}
 
+	public CompletableFuture<CopyOnWriteArrayList<JobAssetMaster_DTO>> getSelectAssetsByDirection(Character dFlag) 
+	{
+		CompletableFuture<CopyOnWriteArrayList<JobAssetMaster_DTO>> future = CompletableFuture.supplyAsync(() -> {
+			CopyOnWriteArrayList<JobAssetMaster> jobAssetMasters = jobAssetMasterPublicReadRepo.getSelectAssetsByDirection(dFlag);
+			CopyOnWriteArrayList<JobAssetMaster_DTO> jobAssetMaster_DTOs = jobAssetMasters != null
+					? this.getJobAssetMaster_DTOs(jobAssetMasters)
+					: null;
+			return jobAssetMaster_DTOs;
+		}, asyncExecutor);
+		return future;
+	}
+
+	
 	public CompletableFuture<CopyOnWriteArrayList<JobAssetMaster_DTO>> getSelectJobAssetsByTargets(
 			CopyOnWriteArrayList<Long> trgSeqNos) {
 		CompletableFuture<CopyOnWriteArrayList<JobAssetMaster_DTO>> future = CompletableFuture.supplyAsync(() -> {
@@ -110,6 +123,7 @@ public class JobAssetMasterPublicRead_Service implements I_JobAssetMasterPublicR
 		lDTO.setModeSeqNo(lMaster.getId().getModeSeqNo());
 		lDTO.setRateSeqNo(lMaster.getRateSeqNo());
 		lDTO.setReturnflag(lMaster.getReturnflag());
+		lDTO.setDirectionflag(lMaster.getDirectionflag());
 		return lDTO;
 	}
 

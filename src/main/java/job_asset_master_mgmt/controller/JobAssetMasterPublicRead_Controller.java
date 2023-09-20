@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,6 +53,14 @@ public class JobAssetMasterPublicRead_Controller {
 		return new ResponseEntity<>(assetDTOs, HttpStatus.OK);
 	}
 
+	@GetMapping(value = "/getSelectJobAssetsByDirection/{dFlag}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<CopyOnWriteArrayList<JobAssetMaster_DTO>> getSelectJobAssetsByDirection(@PathVariable Character dFLag) 
+	{
+		CompletableFuture<CopyOnWriteArrayList<JobAssetMaster_DTO>> completableFuture = jobAssetMasterPublicReadServ.getSelectAssetsByDirection(dFLag);
+		CopyOnWriteArrayList<JobAssetMaster_DTO> assetDTOs = completableFuture.join();
+		return new ResponseEntity<>(assetDTOs, HttpStatus.OK);
+	}
+	
 	@GetMapping(value = "/getSelectJobAssetsByTargets", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<CopyOnWriteArrayList<JobAssetMaster_DTO>> getSelectJobAssetsByTargets(
 			@RequestBody CopyOnWriteArrayList<Long> ids) {
